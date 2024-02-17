@@ -25,8 +25,10 @@ import Item from "./item";
 import { toast } from "sonner";
 import DocumentList from "./document-list";
 import TrashBox from "./trash-box";
+import { useSearch } from "@/hooks/use-search";
 
 export default function Navigation() {
+  const search = useSearch();
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -148,7 +150,7 @@ export default function Navigation() {
         </div>
         <div>
           <UserItem />
-          <Item onClick={() => {}} label="Search" icon={Search} isSearch />
+          <Item onClick={search.onOpen} label="Search" icon={Search} isSearch />
           <Item onClick={() => {}} label="Settings" icon={Settings} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
