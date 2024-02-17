@@ -26,9 +26,12 @@ import { toast } from "sonner";
 import DocumentList from "./document-list";
 import TrashBox from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
+import { useSettings } from "@/hooks/use-settings";
 
 export default function Navigation() {
   const search = useSearch();
+  const settings = useSettings();
+
   const pathname = usePathname();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
@@ -151,7 +154,7 @@ export default function Navigation() {
         <div>
           <UserItem />
           <Item onClick={search.onOpen} label="Search" icon={Search} isSearch />
-          <Item onClick={() => {}} label="Settings" icon={Settings} />
+          <Item onClick={settings.onOpen} label="Settings" icon={Settings} />
           <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
         </div>
         <div className="mt-4">
