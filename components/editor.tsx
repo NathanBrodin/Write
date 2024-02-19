@@ -13,11 +13,7 @@ interface EditorProps {
   editable?: boolean;
 }
 
-export default function Editor({
-  onChange,
-  initialContent,
-  editable,
-}: EditorProps) {
+const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
 
@@ -31,7 +27,9 @@ export default function Editor({
 
   const editor: BlockNoteEditor = useBlockNote({
     editable,
-    initialContent: initialContent ? JSON.parse(initialContent) as PartialBlock[] : undefined,
+    initialContent: initialContent
+      ? (JSON.parse(initialContent) as PartialBlock[])
+      : undefined,
     onEditorContentChange: (editor) => {
       onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
     },
@@ -46,4 +44,6 @@ export default function Editor({
       />
     </div>
   );
-}
+};
+
+export default Editor;
