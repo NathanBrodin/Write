@@ -7,7 +7,6 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { useConvexAuth } from "convex/react";
 import { SignInButton, UserButton } from "@clerk/clerk-react";
 import { Button } from "@/components/ui/button";
-import Spinner from "@/components/spinner";
 import Link from "next/link";
 
 export default function Navbar() {
@@ -22,7 +21,7 @@ export default function Navbar() {
     >
       <Logo />
       <div className="md:ml-auto md:justify-end justify-between w-full flex items-center gap-x-2">
-        {isLoading && <Spinner />}
+        {isLoading && <Button disabled size="sm">Get Note</Button>}
         {!isAuthenticated && !isLoading && (
           <>
             <SignInButton mode="modal">
@@ -31,7 +30,7 @@ export default function Navbar() {
               </Button>
             </SignInButton>
             <SignInButton mode="modal">
-              <Button size="sm">Get Notion free</Button>
+              <Button size="sm">Get Note</Button>
             </SignInButton>
           </>
         )}
@@ -39,7 +38,7 @@ export default function Navbar() {
           <>
             <Button variant="ghost" size="sm" asChild>
               <Link href="/documents">
-                Enter Notion
+                Enter Note
               </Link>
             </Button>
             <UserButton afterSignOutUrl="/"/>
