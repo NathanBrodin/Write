@@ -1,6 +1,5 @@
 "use client";
 
-import Spinner from "@/components/spinner";
 import { Button } from "@/components/ui/button";
 import { SignInButton } from "@clerk/clerk-react";
 import { useConvexAuth } from "convex/react";
@@ -13,30 +12,33 @@ export default function Heading() {
   return (
     <div className="max-w-3xl space-y-4">
       <h1 className="text-3-xl sm:text-5xl md:text-6xl font-bold">
-        Your Ideas, Documents, & Plans. Unified. Welcome to{" "}
-        <span className="underline">Notion</span>
+        Capture, Collaborate, Create. Welcome to{" "}
+        <span className="underline">Note</span>
       </h1>
       <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        Notion is the connected workspace where <br />
-        better, faster work happens.
+        Note is your all-in-one platform for <br />
+        seamless collaboration and creativity.
       </h3>
       {isLoading && (
         <div className="w-full flex items-center justify-center">
-          <Spinner size="lg" />{" "}
+          <Button disabled>
+            Enter Note
+            <ArrowRight className="h-4 w-4 ml-2" />
+          </Button>
         </div>
       )}
       {isAuthenticated && !isLoading && (
         <Button asChild>
           <Link href="/documents">
-            Enter Notion
+            Enter Note
             <ArrowRight className="h-4 w-4 ml-2" />
           </Link>
         </Button>
       )}
       {!isAuthenticated && !isLoading && (
-        <SignInButton mode="modal">
+        <SignInButton mode="modal" redirectUrl="/documents">
           <Button>
-            Get Notion free
+            Enter Note
             <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </SignInButton>
