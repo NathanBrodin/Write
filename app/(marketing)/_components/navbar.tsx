@@ -24,12 +24,12 @@ export default function Navbar() {
         {isLoading && <Button disabled size="sm">Get Note</Button>}
         {!isAuthenticated && !isLoading && (
           <>
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" redirectUrl="/documents">
               <Button variant="ghost" size="sm">
                 Sign in
               </Button>
             </SignInButton>
-            <SignInButton mode="modal">
+            <SignInButton mode="modal" redirectUrl="/documents">
               <Button size="sm">Get Note</Button>
             </SignInButton>
           </>
