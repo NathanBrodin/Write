@@ -2,6 +2,14 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 export default defineSchema({
+  projects: defineTable({
+    title: v.string(),
+    userId: v.string(),
+    documents: v.array(v.id("documents")),
+    isArchived: v.boolean(),
+    isPublished: v.boolean(),
+  }).index("by_user", ["userId"]),
+
   documents: defineTable({
     title: v.string(),
     userId: v.string(),
