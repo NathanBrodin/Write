@@ -25,7 +25,6 @@ export const create = mutation({
   },
 });
 
-
 export const getById = query({
   args: { projectId: v.id("projects") },
   handler: async (ctx, args) => {
@@ -73,5 +72,51 @@ export const getSidebar = query({
       .collect();
 
     return projects;
+  },
+});
+
+export const archive = mutation({
+  args: {
+    id: v.id("projects"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingProject = await ctx.db.get(args.id);
+
+    if (!existingProject) {
+      throw new Error("Not found");
+    }
+
+    if (existingProject.userId !== userId) {
+      throw new Error("Not authorized");
+    }
+
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) =>
+        q.eq("userId", userId).eq("parentProject", args.id)
+      )
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .order("desc")
+      .collect();
+
+    for (const document of documents) {
+      await ctx.db.patch(document._id, {
+        isArchived: true,
+      });
+    }
+
+    const project = await ctx.db.patch(args.id, {
+      isArchived: true,
+    });
+
+    return project;
   },
 });

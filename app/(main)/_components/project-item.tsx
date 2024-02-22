@@ -45,6 +45,7 @@ export default function ProjectItem({
   const { user } = useUser();
   const router = useRouter();
   const create = useMutation(api.documents.create);
+  const archive = useMutation(api.projects.archive);
 
   function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
@@ -76,6 +77,16 @@ export default function ProjectItem({
   function onArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
     if (!id) return;
+
+    const promise = archive({ id }).then(() => {
+      router.push("/projects");
+    });
+
+    toast.promise(promise, {
+      loading: "Moving to trash...",
+      success: "Note moved to trash!",
+      error: "Failed to archive note.",
+    });
   }
 
   const ChevronIcon = expanded ? ChevronDown : ChevronRight;
