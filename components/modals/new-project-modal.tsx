@@ -14,8 +14,11 @@ export function NewProjectModal() {
   const create = useMutation(api.projects.create);
   const router = useRouter();
 
-  function onCreate() {
+  function onCreate(event: React.FormEvent) {
+    event.preventDefault();
+
     const promise = create({ title }).then((projectId) => {
+      newProject.onClose();
       router.push(`/projects/${projectId}`);
     });
 
@@ -29,19 +32,21 @@ export function NewProjectModal() {
   return (
     <Dialog open={newProject.isOpen} onOpenChange={newProject.onClose}>
       <DialogContent>
-        <DialogHeader>
-          <h2 className="text-center text-lg font-semibold">New Project</h2>
-        </DialogHeader>
-        <Input
-          className="w-full"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          placeholder="Untitled"
-        />
-        {/* TODO: Add a template selector, with blank as default */}
-        <Button onClick={onCreate} className="mt-4">
-          Create
-        </Button>
+        <form onSubmit={onCreate}>
+          <DialogHeader>
+            <h2 className="text-center text-lg font-semibold">New Project</h2>
+          </DialogHeader>
+          <Input
+            className="w-full"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Untitled"
+          />
+          {/* TODO: Add a template selector, with blank as default */}
+          <Button type="submit" className="mt-4 w-full">
+            Create
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );
