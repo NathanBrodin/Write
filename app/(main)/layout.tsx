@@ -15,8 +15,9 @@ export default function MainLayout({
 
   if (isLoading) {
     return (
-      <div className="h-full flex items-center justify-center">
+      <div className="h-full flex flex-col items-center justify-center dark:bg-[#1F1F1F]">
         <Spinner size="lg" />
+        <p className="font-medium">Checking authentication status...</p>
       </div>
     );
   }
