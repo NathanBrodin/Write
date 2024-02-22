@@ -54,7 +54,7 @@ export const archive = mutation({
 
 export const getSidebar = query({
   args: {
-    parentProject: v.optional(v.id("projects")),
+    parentProject: v.id("projects"),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();

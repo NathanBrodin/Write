@@ -18,7 +18,6 @@ import {
   ChevronRight,
   LucideIcon,
   MoreHorizontal,
-  Plus,
   Trash,
 } from "lucide-react";
 import { useRouter } from "next/navigation";
@@ -51,7 +50,6 @@ export default function Item({
   icon: Icon,
 }: ItemProps) {
   const router = useRouter();
-  const create = useMutation(api.documents.create);
   const archive = useMutation(api.documents.archive);
   const { user } = useUser();
 
@@ -59,27 +57,6 @@ export default function Item({
     event.stopPropagation();
 
     onExpand?.();
-  }
-
-  function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.stopPropagation();
-    if (!id) return;
-
-    const promise = create({ title: "Untitled", parentDocument: id }).then(
-      (documentId) => {
-        if (!expanded) {
-          onExpand?.();
-        }
-
-        router.push(`/documents/${documentId}`);
-      }
-    );
-
-    toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note.",
-    });
   }
 
   function onArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
@@ -109,15 +86,6 @@ export default function Item({
         active && "bg-primary/5 text-primary"
       )}
     >
-      {!!id && (
-        <div
-          role="button"
-          className="h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 mr-1"
-          onClick={handleExpand}
-        >
-          <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
-        </div>
-      )}
       {documentIcon ? (
         <div className="shrink-0 mr-2 text-[18px]">{documentIcon}</div>
       ) : (
@@ -156,13 +124,6 @@ export default function Item({
               </div>
             </DropdownMenuContent>
           </DropdownMenu>
-          <div
-            role="button"
-            onClick={onCreate}
-            className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
-          >
-            <Plus className="w-4 h-4 text-muted-foreground" />
-          </div>
         </div>
       )}
     </div>

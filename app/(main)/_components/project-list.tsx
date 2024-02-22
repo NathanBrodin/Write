@@ -8,7 +8,6 @@ import ProjectItem from "./project-item";
 import { cn } from "@/lib/utils";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import DocumentList from "./document-list";
-import { Plus } from "lucide-react";
 import Item from "./item";
 
 interface DocumentListProps {
@@ -42,28 +41,8 @@ export default function ProjectList({ parentProjectId }: DocumentListProps) {
     );
   }
 
-  function handleCreate() {
-    // const promise = create({ title: "Untitled" }).then((documentId) => {
-    //   router.push(`/documents/${documentId}`);
-    // });
-
-    // toast.promise(promise, {
-    //   loading: "Creating a new note...",
-    //   success: "New note created!",
-    //   error: "Failed to create a new note",
-    // });
-  }
-
   return (
     <>
-      <p
-        className={cn(
-          "hidden text-sm font-medium text-muted-foreground/80",
-          expanded && "last:block"
-        )}
-      >
-        No pages inside
-      </p>
       {projects.map((project) => (
         <div key={project._id}>
           <ProjectItem
@@ -74,10 +53,7 @@ export default function ProjectList({ parentProjectId }: DocumentListProps) {
             onExpand={() => onExpand(project._id)}
             expanded={expanded[project._id]}
           />
-          {expanded[project._id] && <DocumentList />}
-          {expanded[project._id] && (
-            <Item onClick={handleCreate} icon={Plus} label="Add a page" />
-          )}
+          {expanded[project._id] && <DocumentList parentProjectId={project._id} />}
         </div>
       ))}
     </>

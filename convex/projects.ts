@@ -17,7 +17,6 @@ export const create = mutation({
     const project = await ctx.db.insert("projects", {
       title: args.title,
       userId,
-      documents: [],
       isArchived: false,
       isPublished: false,
     });
@@ -25,6 +24,7 @@ export const create = mutation({
     return project;
   },
 });
+
 
 export const getById = query({
   args: { projectId: v.id("projects") },

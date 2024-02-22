@@ -4,27 +4,18 @@ import { api } from "@/convex/_generated/api";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
-import { useState } from "react";
 import Item from "./item";
 import { cn } from "@/lib/utils";
-import { FileIcon } from "lucide-react";
+import { FileCode2 } from "lucide-react";
 
 interface DocumentListProps {
-  parentProjectId?: Id<"projects">;
+  parentProjectId: Id<"projects">;
   data?: Doc<"documents">[];
 }
 
 export default function DocumentList({ parentProjectId }: DocumentListProps) {
   const params = useParams();
   const router = useRouter();
-  const [expanded, setExpanded] = useState<Record<string, boolean>>({});
-
-  function onExpand(documentId: string) {
-    setExpanded((prevExpanded) => ({
-      ...prevExpanded,
-      [documentId]: !prevExpanded[documentId],
-    }));
-  }
 
   const documents = useQuery(api.documents.getSidebar, {
     parentProject: parentProjectId,
@@ -45,9 +36,12 @@ export default function DocumentList({ parentProjectId }: DocumentListProps) {
   return (
     <>
       <p
+      style={{
+        paddingLeft: "24px",
+      }}
         className={cn(
           "hidden text-sm font-medium text-muted-foreground/80",
-          expanded && "last:block"
+          documents.length === 0 ? "block" : "hidden",
         )}
       >
         No pages inside
@@ -58,10 +52,9 @@ export default function DocumentList({ parentProjectId }: DocumentListProps) {
             id={document._id}
             onClick={() => onRedirect(document._id)}
             label={document.title}
-            icon={FileIcon}
+            icon={FileCode2}
             active={params.documentId === document._id}
-            onExpand={() => onExpand(document._id)}
-            expanded={expanded[document._id]}
+            level={1.5}
           />
         </div>
       ))}
