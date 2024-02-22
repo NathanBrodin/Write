@@ -12,8 +12,8 @@ import { EdgeStoreProvider } from "@/lib/edgestore";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Notion",
-  description: "All your notes in one place",
+  title: "Note",
+  description: "Capture, Collaborate, Create.",
   icons: {
     icon: [
       {
@@ -45,7 +45,7 @@ export default function RootLayout({
               defaultTheme="system"
               enableSystem
               disableTransitionOnChange
-              storageKey="notion-theme"
+              storageKey="note-theme"
             >
               {children}
               <Toaster position="bottom-center" />
