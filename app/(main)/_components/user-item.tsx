@@ -1,22 +1,18 @@
 "user client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronsLeftRight } from "lucide-react";
 import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { Label } from "@/components/ui/label";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
 
 export function UserItem() {
   const { user } = useUser();
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <div
           role="button"
           className="flex items-center text-sm p-3 w-full hover:bg-primary/5"
@@ -29,15 +25,9 @@ export function UserItem() {
               {user?.fullName}&apos;s Notion
             </span>
           </div>
-          <ChevronsLeftRight className="h-4 w-4 rotate-90 ml-2 text-muted-foreground" />
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-80"
-        align="start"
-        alignOffset={11}
-        forceMount
-      >
+      </DialogTrigger>
+      <DialogContent className="w-96 space-y-2">
         <div className="flex flex-col space-y-4 p-2">
           <p className="text-sm font-medium leading-none text-muted-foreground">
             {user?.emailAddresses[0].emailAddress}
@@ -55,14 +45,21 @@ export function UserItem() {
             </div>
           </div>
         </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="w-full cursor-pointer text-muted-foreground"
-          asChild
-        >
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex flex-col space-y-2">
+            <Label>Appearance</Label>
+            <span className="text-[0.8rem] text-muted-foreground">
+              Customize how Notion looks on your device
+            </span>
+          </div>
+          <ModeToggle />
+        </div>
+        <Separator />
+        <Button className="w-full cursor-pointer text-muted-foreground" asChild variant="outline">
           <SignOutButton>Sign out</SignOutButton>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }

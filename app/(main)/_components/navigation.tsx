@@ -8,7 +8,6 @@ import {
   Plus,
   PlusCircle,
   Search,
-  Settings,
   Trash,
 } from "lucide-react";
 import {
@@ -26,20 +25,19 @@ import Item from "./item";
 import { toast } from "sonner";
 import TrashBox from "./trash-box";
 import { useSearch } from "@/hooks/use-search";
-import { useSettings } from "@/hooks/use-settings";
 import Navbar from "./navbar";
 import ProjectList from "./project-list";
+import { useNewProject } from "@/hooks/use-new-project";
 
 export default function Navigation() {
   const search = useSearch();
-  const settings = useSettings();
 
   const pathname = usePathname();
   const params = useParams();
   const router = useRouter();
   const isMobile = useMediaQuery("(max-width: 768px)");
 
-  const create = useMutation(api.documents.create);
+  const newProject = useNewProject();
 
   const isReszingRef = useRef(false);
   const sidebarRef = useRef<ElementRef<"aside">>(null);
@@ -126,15 +124,7 @@ export default function Navigation() {
   }
 
   function handleCreate() {
-    const promise = create({ title: "Untitled" }).then((documentId) => {
-      router.push(`/documents/${documentId}`);
-    });
-
-    toast.promise(promise, {
-      loading: "Creating a new note...",
-      success: "New note created!",
-      error: "Failed to create a new note",
-    });
+    newProject.onOpen();
   }
 
   return (
@@ -142,29 +132,41 @@ export default function Navigation() {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col z-[99999]",
+          "group/sidebar h-full bg-secondary overflow-y-auto relative flex w-60 flex-col justify-between z-[99999]",
           isResetting && "transition-all ease-in-out duration-300",
           isMobile && "w-0"
         )}
       >
-        <div
-          onClick={collapse}
-          role="button"
-          className={cn(
-            "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
-            isMobile && "opacity-100"
-          )}
-        >
-          <ChevronsLeft className="h-6 w-6" />
-        </div>
         <div>
-          <UserItem />
-          <Item onClick={search.onOpen} label="Search" icon={Search} isSearch />
-          <Item onClick={settings.onOpen} label="Settings" icon={Settings} />
-          <Item onClick={handleCreate} label="New page" icon={PlusCircle} />
+          <div
+            onClick={collapse}
+            role="button"
+            className={cn(
+              "h-6 w-6 text-muted-foreground rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 absolute top-3 right-2 opacity-0 group-hover/sidebar:opacity-100 transition",
+              isMobile && "opacity-100"
+            )}
+          >
+            <ChevronsLeft className="h-6 w-6" />
+          </div>
+          <div>
+            <UserItem />
+            <Item
+              onClick={search.onOpen}
+              label="Search"
+              icon={Search}
+              isSearch
+            />
+            <Item
+              onClick={handleCreate}
+              label="New project"
+              icon={PlusCircle}
+            />
+          </div>
+          <div className="mt-8">
+            <ProjectList />
+          </div>
         </div>
-        <div className="mt-4">
-          <ProjectList />
+        <div className="mb-2">
           <Popover>
             <PopoverTrigger className="w-full mt-4">
               <Item label="Trash" icon={Trash} />
