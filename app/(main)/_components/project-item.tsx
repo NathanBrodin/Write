@@ -15,7 +15,7 @@ interface ItemProps {
   onClick?: () => void;
 }
 
-export default function Item({
+export default function ProjectItem({
   id,
   active,
   expanded,
@@ -63,7 +63,7 @@ export default function Item({
   );
 }
 
-Item.Skeleton = function ItemSkeleton() {
+ProjectItem.Skeleton = function ItemSkeleton() {
   return (
     <div className="flex gap-x-2 py-[3px]">
       <Skeleton className="h-4 w-4" />
