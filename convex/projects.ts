@@ -142,6 +142,20 @@ export const restore = mutation({
       throw new Error("Not authorized");
     }
 
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) =>
+        q.eq("userId", userId).eq("parentProject", args.id)
+      )
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .collect();
+
+    for (const document of documents) {
+      await ctx.db.patch(document._id, {
+        isArchived: false,
+      });
+    }
+
     const project = await ctx.db.patch(args.id, {
       isArchived: false,
     });
@@ -178,8 +192,7 @@ export const remove = mutation({
       .withIndex("by_user_parent", (q) =>
         q.eq("userId", userId).eq("parentProject", args.id)
       )
-      .filter((q) => q.eq(q.field("isArchived"), false))
-      .order("desc")
+      .filter((q) => q.eq(q.field("isArchived"), true))
       .collect();
 
     for (const document of documents) {
