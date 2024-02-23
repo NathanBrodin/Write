@@ -23,7 +23,7 @@ export default function Error() {
       />
       <h2 className="text-xl font-medium">Something went wrong</h2>
       <Button asChild>
-        <Link href="/documents">Go back</Link>
+        <Link href="/projects">Go back</Link>
       </Button>
     </div>
   );

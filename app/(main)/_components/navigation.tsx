@@ -173,7 +173,7 @@ export default function Navigation() {
             </PopoverTrigger>
             <PopoverContent
               side={isMobile ? "bottom" : "right"}
-              className="p-0 w-72"
+              className="p-0 w-72 mb-2"
             >
               <TrashBox />
             </PopoverContent>
