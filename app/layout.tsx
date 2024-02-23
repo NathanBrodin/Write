@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -48,7 +48,7 @@ export default function RootLayout({
               storageKey="note-theme"
             >
               {children}
-              <Toaster position="bottom-center" />
+              <Toaster />
               <ModalProvider />
             </ThemeProvider>
           </EdgeStoreProvider>

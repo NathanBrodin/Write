@@ -120,3 +120,95 @@ export const archive = mutation({
     return project;
   },
 });
+
+export const restore = mutation({
+  args: { id: v.id("projects") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingProject = await ctx.db.get(args.id);
+
+    if (!existingProject) {
+      throw new Error("Not found");
+    }
+
+    if (existingProject.userId !== userId) {
+      throw new Error("Not authorized");
+    }
+
+    const project = await ctx.db.patch(args.id, {
+      isArchived: false,
+    });
+
+    return project;
+  },
+});
+
+export const remove = mutation({
+  args: {
+    id: v.id("projects"),
+  },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const existingProject = await ctx.db.get(args.id);
+
+    if (!existingProject) {
+      throw new Error("Not found");
+    }
+
+    if (existingProject.userId !== userId) {
+      throw new Error("Not authorized");
+    }
+
+    const documents = await ctx.db
+      .query("documents")
+      .withIndex("by_user_parent", (q) =>
+        q.eq("userId", userId).eq("parentProject", args.id)
+      )
+      .filter((q) => q.eq(q.field("isArchived"), false))
+      .order("desc")
+      .collect();
+
+    for (const document of documents) {
+      await ctx.db.delete(document._id);
+    }
+
+    const project = await ctx.db.delete(args.id);
+
+    return project;
+  },
+});
+
+export const getTrash = query({
+  handler: async (ctx) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const projects = await ctx.db
+      .query("projects")
+      .withIndex("by_user", (q) => q.eq("userId", userId))
+      .filter((q) => q.eq(q.field("isArchived"), true))
+      .order("desc")
+      .collect();
+
+    return projects;
+  },
+});
