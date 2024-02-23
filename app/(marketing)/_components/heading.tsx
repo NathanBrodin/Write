@@ -36,7 +36,7 @@ export default function Heading() {
         </Button>
       )}
       {!isAuthenticated && !isLoading && (
-        <SignInButton mode="modal" redirectUrl="/documents">
+        <SignInButton mode="modal" redirectUrl="/projects">
           <Button>
             Enter Note
             <ArrowRight className="h-4 w-4 ml-2" />
