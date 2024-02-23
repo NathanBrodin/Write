@@ -4,6 +4,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -12,11 +13,12 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { useMutation } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import {
   ChevronDown,
   ChevronRight,
   FolderIcon,
+  FolderPen,
   MoreHorizontal,
   Plus,
   Trash,
@@ -24,9 +26,10 @@ import {
 import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
+import { ProjectTitle } from "./project-title";
 
 interface ItemProps {
-  id?: Id<"projects">;
+  id: Id<"projects">;
   active?: boolean;
   expanded?: boolean;
   onExpand?: () => void;
@@ -44,6 +47,9 @@ export default function ProjectItem({
 }: ItemProps) {
   const { user } = useUser();
   const router = useRouter();
+  const project = useQuery(api.projects.getById, {
+    projectId: id,
+  });
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.projects.archive);
 
@@ -126,6 +132,9 @@ export default function ProjectItem({
             side="right"
             forceMount
           >
+            <DropdownMenuLabel>
+              {project && <ProjectTitle initialData={project} />}
+            </DropdownMenuLabel>
             <DropdownMenuItem onClick={onArchive}>
               <Trash className="w-4 h-4 mr-2" />
               Delete
