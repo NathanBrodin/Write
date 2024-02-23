@@ -126,39 +126,11 @@ export const restore = mutation({
       throw new Error("Not authorized");
     }
 
-    // async function recursiveRestore(documentId: Id<"documents">) {
-    //   const children = await ctx.db
-    //     .query("documents")
-    //     .withIndex("by_user_parent", (q) =>
-    //       q.eq("userId", userId).eq("parentDocument", documentId)
-    //     )
-    //     .collect();
+    const document = await ctx.db.patch(args.id, {
+      isArchived: false,
+    });
 
-    //   for (const child of children) {
-    //     await ctx.db.patch(child._id, {
-    //       isArchived: false,
-    //     });
-
-    //     await recursiveRestore(child._id);
-    //   }
-    // }
-
-    // const options: Partial<Doc<"documents">> = {
-    //   isArchived: false,
-    // };
-
-    // if (existingDocument.parentDocument) {
-    //   const parent = await ctx.db.get(existingDocument.parentDocument);
-    //   if (parent?.isArchived) {
-    //     options.parentDocument = undefined;
-    //   }
-    // }
-
-    // const document = await ctx.db.patch(args.id, options);
-
-    // recursiveRestore(args.id);
-
-    // return document;
+    return document;
   },
 });
 

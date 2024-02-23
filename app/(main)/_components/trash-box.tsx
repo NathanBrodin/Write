@@ -24,8 +24,13 @@ export default function TrashBox() {
     return document.title.toLocaleLowerCase().includes(search.toLowerCase());
   });
 
-  function onClick(documentId: string) {
-    router.push(`/documents/${documentId}`);
+  function onClick(
+    documentId: Id<"documents">,
+    parentProjectId?: Id<"projects">
+  ) {
+    if (!parentProjectId) return;
+
+    router.push(`/projects/${parentProjectId}/${documentId}`);
   }
 
   function onRestore(
@@ -36,9 +41,9 @@ export default function TrashBox() {
     const promise = restore({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Restoring note...",
-      success: "Note restored!",
-      error: "Failed to restore note.",
+      loading: "Restoring document...",
+      success: "Document restored!",
+      error: "Failed to restore document.",
     });
   }
 
@@ -46,13 +51,13 @@ export default function TrashBox() {
     const promise = remove({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Deleting note...",
-      success: "Note deleted!",
-      error: "Failed to delete note.",
+      loading: "Deleting document...",
+      success: "Document deleted!",
+      error: "Failed to delete document.",
     });
 
     if (params.documentId == documentId) {
-      router.push(`/documents`);
+      router.push(`/projects`);
     }
   }
 
@@ -83,7 +88,7 @@ export default function TrashBox() {
           <div
             key={document._id}
             role="button"
-            onClick={() => onClick(document._id)}
+            onClick={() => onClick(document._id, document.parentProject)}
             className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
           >
             <span className="truncate pl-2">{document.title}</span>

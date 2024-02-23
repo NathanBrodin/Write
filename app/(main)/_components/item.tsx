@@ -13,14 +13,8 @@ import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
 import { useMutation } from "convex/react";
-import {
-  ChevronDown,
-  ChevronRight,
-  LucideIcon,
-  MoreHorizontal,
-  Trash,
-} from "lucide-react";
-import { useRouter } from "next/navigation";
+import { LucideIcon, MoreHorizontal, Trash } from "lucide-react";
+import { useParams, useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 
@@ -28,10 +22,8 @@ interface ItemProps {
   id?: Id<"documents">;
   documentIcon?: string;
   active?: boolean;
-  expanded?: boolean;
   isSearch?: boolean;
   level?: number;
-  onExpand?: () => void;
   label: string;
   onClick?: () => void;
   icon: LucideIcon;
@@ -41,40 +33,33 @@ export default function Item({
   id,
   documentIcon,
   active,
-  expanded,
   isSearch,
   level,
-  onExpand,
   label,
   onClick,
   icon: Icon,
 }: ItemProps) {
   const router = useRouter();
+  const params = useParams();
   const archive = useMutation(api.documents.archive);
   const { user } = useUser();
-
-  function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
-    event.stopPropagation();
-
-    onExpand?.();
-  }
 
   function onArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
     if (!id) return;
 
     const promise = archive({ id }).then(() => {
-      router.push("/documents");
+      if (params.projectId) {
+        router.push(`/projects/${params.projectId}`);
+      }
     });
 
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
-      error: "Failed to archive note.",
+      error: "Failed to archive document.",
     });
   }
-
-  const ChevronIcon = expanded ? ChevronDown : ChevronRight;
 
   return (
     <div
