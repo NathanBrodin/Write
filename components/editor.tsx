@@ -1,23 +1,26 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { BlockNoteEditor, PartialBlock } from "@blocknote/core";
-import { BlockNoteView, useBlockNote } from "@blocknote/react";
-import "@blocknote/core/style.css";
+import dynamic from "next/dynamic";
+import "@uiw/react-markdown-editor/markdown-editor.css";
+import "@uiw/react-markdown-preview/markdown.css";
 
 import { useEdgeStore } from "@/lib/edgestore";
+import { useState } from "react";
 
 interface EditorProps {
   onChange: (value: string, markdown: string) => void;
   initialContent?: string;
-  editable?: boolean;
 }
 
-export default function Editor({
-  onChange,
-  initialContent,
-  editable,
-}: EditorProps) {
+const MarkdownEditor = dynamic(
+  () => import("@uiw/react-markdown-editor").then((mod) => mod.default),
+  { ssr: false }
+);
+
+export default function Editor({ onChange, initialContent }: EditorProps) {
+  const [markdown, setMarkdown] = useState(`function add(a, b) {\n  return a + b;\n}`);
+
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
 
@@ -29,29 +32,13 @@ export default function Editor({
     return response.url;
   };
 
-  const editor: BlockNoteEditor = useBlockNote({
-    editable,
-    initialContent: initialContent
-      ? (JSON.parse(initialContent) as PartialBlock[])
-      : undefined,
-    onEditorContentChange: (editor) => {
-      const saveBlocksAsMarkdown = async () => {
-        const markdown: string = await editor.blocksToMarkdown(
-          editor.topLevelBlocks
-        );
-        onChange(JSON.stringify(editor.topLevelBlocks, null, 2), markdown);
-      };
-      saveBlocksAsMarkdown();
-    },
-    uploadFile: handleUpload,
-  });
-
   return (
-    <div>
-      <BlockNoteView
-        editor={editor}
-        theme={resolvedTheme === "dark" ? "dark" : "light"}
-      />
-    </div>
+    <MarkdownEditor
+      className="w-full"
+      height="calc(100vh - 300px)"
+      value={markdown}
+      onChange={(value, viewUpdate) => setMarkdown(value)}
+      theme={resolvedTheme === "dark" ? "dark" : "light"}
+    />
   );
 }

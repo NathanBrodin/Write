@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { CoverImageModal } from "@/components/modals/cover-image-modal";
 import { NewProjectModal } from "../modals/new-project-modal";
 
 export function ModalProvider() {
@@ -17,7 +16,6 @@ export function ModalProvider() {
 
   return (
     <>
-      <CoverImageModal />
       <NewProjectModal />
     </>
   );

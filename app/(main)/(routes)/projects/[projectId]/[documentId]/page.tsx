@@ -55,9 +55,9 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }
 
   return (
-    <div className="grid grid-cols-2 py-40">
+    <div className="py-40 h-full">
       <Editor onChange={onChange} initialContent={document.content} />
-      <Preview initialContent={md} />
+      {/* <Preview initialContent={md} /> */}
     </div>
   );
 }
