@@ -5,7 +5,7 @@ import dynamic from "next/dynamic";
 import "@uiw/react-markdown-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { useEffect, useState } from "react";
-import { useDebounceValue } from "usehooks-ts";
+import { useDebounceValue, useLocalStorage } from "usehooks-ts";
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -18,6 +18,7 @@ const MarkdownEditor = dynamic(
 );
 
 export default function Editor({ onChange, initialContent }: EditorProps) {
+  const [enablePreview, setEnablePreview] = useLocalStorage('enable-preview', true)
   const { resolvedTheme } = useTheme();
 
   // I am using a useState between the Editor and Convex because it was too slow to update the Convex state on every key stroke
@@ -36,6 +37,11 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
     setDebouncedMarkdown(value);
   }
 
+  function handlePreviewMode(isHide: boolean) {
+    console.log("handlePreviewMode", isHide);
+    setEnablePreview(isHide);
+  }
+
   return (
     <MarkdownEditor
       className="w-full"
@@ -43,6 +49,8 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
       value={markdown}
       onChange={handleChange}
       theme={resolvedTheme === "dark" ? "dark" : "light"}
+      visible={enablePreview}
+      onPreviewMode={handlePreviewMode}
     />
   );
 }
