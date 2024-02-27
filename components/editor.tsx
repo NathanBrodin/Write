@@ -8,12 +8,16 @@ import "@blocknote/core/style.css";
 import { useEdgeStore } from "@/lib/edgestore";
 
 interface EditorProps {
-  onChange: (value: string) => void;
+  onChange: (value: string, markdown: string) => void;
   initialContent?: string;
   editable?: boolean;
 }
 
-const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
+export default function Editor({
+  onChange,
+  initialContent,
+  editable,
+}: EditorProps) {
   const { resolvedTheme } = useTheme();
   const { edgestore } = useEdgeStore();
 
@@ -31,7 +35,13 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       ? (JSON.parse(initialContent) as PartialBlock[])
       : undefined,
     onEditorContentChange: (editor) => {
-      onChange(JSON.stringify(editor.topLevelBlocks, null, 2));
+      const saveBlocksAsMarkdown = async () => {
+        const markdown: string = await editor.blocksToMarkdown(
+          editor.topLevelBlocks
+        );
+        onChange(JSON.stringify(editor.topLevelBlocks, null, 2), markdown);
+      };
+      saveBlocksAsMarkdown();
     },
     uploadFile: handleUpload,
   });
@@ -44,6 +54,4 @@ const Editor = ({ onChange, initialContent, editable }: EditorProps) => {
       />
     </div>
   );
-};
-
-export default Editor;
+}

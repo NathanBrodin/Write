@@ -1,10 +1,13 @@
 "use client";
 
-import { useQuery } from "convex/react";
+import { useMutation, useQuery } from "convex/react";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { Skeleton } from "@/components/ui/skeleton";
-import Preview from "@/app/(main)/_components/preview";
+import Preview from "@/components/preview";
+import Editor from "@/components/editor";
+import { useMemo, useState } from "react";
+import dynamic from "next/dynamic";
 
 interface DocumentIdPageProps {
   params: {
@@ -13,9 +16,26 @@ interface DocumentIdPageProps {
 }
 
 export default function DocumentIdPage({ params }: DocumentIdPageProps) {
+  const Editor = useMemo(
+    () => dynamic(() => import("@/components/editor"), { ssr: false }),
+    []
+  );
+
+  const [md, setMd] = useState("");
+
   const document = useQuery(api.documents.getById, {
     documentId: params.documentId,
   });
+
+  const update = useMutation(api.documents.update);
+
+  const onChange = (content: string, markdown: string) => {
+    update({
+      id: params.documentId,
+      content,
+    });
+    setMd(markdown);
+  };
 
   if (document === undefined) {
     return (
@@ -35,8 +55,9 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }
 
   return (
-    <div className="py-40">
-      <Preview initialContent={document.content} />
+    <div className="grid grid-cols-2 py-40">
+      <Editor onChange={onChange} initialContent={document.content} />
+      <Preview initialContent={md} />
     </div>
   );
 }
