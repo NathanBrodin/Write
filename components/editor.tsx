@@ -4,12 +4,11 @@ import { useTheme } from "next-themes";
 import dynamic from "next/dynamic";
 import "@uiw/react-markdown-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
-
-import { useEdgeStore } from "@/lib/edgestore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useDebounceValue } from "usehooks-ts";
 
 interface EditorProps {
-  onChange: (value: string, markdown: string) => void;
+  onChange: (value: string) => void;
   initialContent?: string;
 }
 
@@ -19,25 +18,30 @@ const MarkdownEditor = dynamic(
 );
 
 export default function Editor({ onChange, initialContent }: EditorProps) {
-  const [markdown, setMarkdown] = useState(`function add(a, b) {\n  return a + b;\n}`);
-
   const { resolvedTheme } = useTheme();
-  const { edgestore } = useEdgeStore();
 
-  const handleUpload = async (file: File) => {
-    const response = await edgestore.publicFiles.upload({
-      file,
-    });
+  // I am using a useState between the Editor and Convex because it was too slow to update the Convex state on every key stroke
+  const [markdown, setMarkdown] = useState<string>(initialContent || "");
+  const [debouncedMarkdown, setDebouncedMarkdown] = useDebounceValue(
+    markdown,
+    500
+  );
 
-    return response.url;
-  };
+  useEffect(() => {
+    onChange(debouncedMarkdown);
+  }, [debouncedMarkdown, onChange]);
+
+  function handleChange(value: string) {
+    setMarkdown(value);
+    setDebouncedMarkdown(value);
+  }
 
   return (
     <MarkdownEditor
       className="w-full"
       height="calc(100vh - 300px)"
       value={markdown}
-      onChange={(value, viewUpdate) => setMarkdown(value)}
+      onChange={handleChange}
       theme={resolvedTheme === "dark" ? "dark" : "light"}
     />
   );
