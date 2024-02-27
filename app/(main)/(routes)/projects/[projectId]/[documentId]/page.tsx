@@ -44,7 +44,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }
 
   return (
-    <div className="py-40 h-full">
+    <div className="h-full pt-14">
       <Editor onChange={onChange} initialContent={document.content} />
     </div>
   );

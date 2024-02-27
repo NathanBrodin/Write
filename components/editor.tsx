@@ -44,8 +44,7 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
 
   return (
     <MarkdownEditor
-      className="w-full"
-      height="calc(100vh - 300px)"
+      className="w-full h-full"
       value={markdown}
       onChange={handleChange}
       theme={resolvedTheme === "dark" ? "dark" : "light"}
