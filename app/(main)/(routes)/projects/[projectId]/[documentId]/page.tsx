@@ -1,10 +1,10 @@
 "use client";
 
-import { useMutation, useQuery } from "convex/react";
+import ToggleEditor from "@/components/toggle-editor";
+import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
-import { Skeleton } from "@/components/ui/skeleton";
-import Editor from "@/components/editor";
+import { useMutation, useQuery } from "convex/react";
 
 interface DocumentIdPageProps {
   params: {
@@ -18,14 +18,14 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   });
 
   const update = useMutation(api.documents.update);
-
-  const onChange = (content: string) => {
+  function handleChange(content: string) {
     update({
       id: params.documentId,
       content,
     });
-  };
+  }
 
+  // TODO: Rework loading state
   if (document === undefined) {
     return (
       <div className="mx-auto mt-10 md:max-w-3xl lg:max-w-4xl">
@@ -44,8 +44,8 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }
 
   return (
-    <div className="flex h-full min-h-screen w-full justify-center pt-14">
-      <Editor onChange={onChange} initialContent={document.content} />
-    </div>
+    <>
+      <ToggleEditor initialContent={document.content} onChange={handleChange} />
+    </>
   );
 }
