@@ -28,7 +28,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
 
   if (document === undefined) {
     return (
-      <div className="md:max-w-3xl lg:max-w-4xl mx-auto mt-10">
+      <div className="mx-auto mt-10 md:max-w-3xl lg:max-w-4xl">
         <div className="space-y-4 pl-8 pt-4">
           <Skeleton className="h-14 w-[50%]" />
           <Skeleton className="h-4 w-[80%]" />
@@ -44,7 +44,7 @@ export default function DocumentIdPage({ params }: DocumentIdPageProps) {
   }
 
   return (
-    <div className="h-full pt-14">
+    <div className="flex h-full min-h-screen w-full justify-center pt-14">
       <Editor onChange={onChange} initialContent={document.content} />
     </div>
   );

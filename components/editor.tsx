@@ -5,7 +5,18 @@ import dynamic from "next/dynamic";
 import "@uiw/react-markdown-editor/markdown-editor.css";
 import "@uiw/react-markdown-preview/markdown.css";
 import { useEffect, useState } from "react";
-import { useDebounceValue, useLocalStorage } from "usehooks-ts";
+import { useDebounceValue } from "usehooks-ts";
+import CodeMirror from "@uiw/react-codemirror";
+import { markdown as MD, markdownLanguage } from "@codemirror/lang-markdown";
+import { languages } from "@codemirror/language-data";
+import { githubLight, githubDark } from "@uiw/codemirror-theme-github";
+import { EditorView } from "@codemirror/view";
+
+const styleTheme = EditorView.baseTheme({
+  "&.cm-editor.cm-focused": {
+    outline: "none",
+  },
+});
 
 interface EditorProps {
   onChange: (value: string) => void;
@@ -14,18 +25,17 @@ interface EditorProps {
 
 const MarkdownEditor = dynamic(
   () => import("@uiw/react-markdown-editor").then((mod) => mod.default),
-  { ssr: false }
+  { ssr: false },
 );
 
 export default function Editor({ onChange, initialContent }: EditorProps) {
-  const [enablePreview, setEnablePreview] = useLocalStorage('enable-preview', true)
   const { resolvedTheme } = useTheme();
 
   // I am using a useState between the Editor and Convex because it was too slow to update the Convex state on every key stroke
   const [markdown, setMarkdown] = useState<string>(initialContent || "");
   const [debouncedMarkdown, setDebouncedMarkdown] = useDebounceValue(
     markdown,
-    500
+    500,
   );
 
   useEffect(() => {
@@ -37,19 +47,20 @@ export default function Editor({ onChange, initialContent }: EditorProps) {
     setDebouncedMarkdown(value);
   }
 
-  function handlePreviewMode(isHide: boolean) {
-    console.log("handlePreviewMode", isHide);
-    setEnablePreview(isHide);
-  }
-
   return (
-    <MarkdownEditor
-      className="w-full h-full"
+    <CodeMirror
       value={markdown}
       onChange={handleChange}
-      theme={resolvedTheme === "dark" ? "dark" : "light"}
-      visible={enablePreview}
-      onPreviewMode={handlePreviewMode}
+      className="h-full min-h-screen w-full max-w-3xl text-base focus:outline-none"
+      extensions={[
+        styleTheme,
+        MD({ base: markdownLanguage, codeLanguages: languages }),
+      ]}
+      theme={resolvedTheme === "dark" ? githubDark : githubLight}
+      basicSetup={{
+        lineNumbers: false,
+        foldGutter: false,
+      }}
     />
   );
 }
