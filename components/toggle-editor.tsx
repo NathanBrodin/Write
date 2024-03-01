@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import Editor from "./editor";
 import Preview from "./preview";
-import { useDebounceValue } from "usehooks-ts";
+import { Mode } from "@/lib/types";
+import { useDebounceValue, useLocalStorage } from "usehooks-ts";
 
 interface ToggleEditorProps {
   initialContent?: string;
@@ -12,6 +13,7 @@ export default function ToggleEditor({
   initialContent,
   onChange,
 }: ToggleEditorProps) {
+  const [mode, setMode] = useLocalStorage<Mode[]>("mode", ["code"]);
   const [content, setContent] = useState<string>(initialContent || "");
   const [debouncedContent, setDebouncedContent] = useDebounceValue(
     content,
@@ -29,8 +31,10 @@ export default function ToggleEditor({
 
   return (
     <div className="flex h-full min-h-screen w-full justify-center pt-14">
-      <Editor content={content} setContent={handleContentChange} />
-      {/* <Preview content={content} /> */}
+      {mode.includes("code") && (
+        <Editor content={content} setContent={handleContentChange} />
+      )}
+      {mode.includes("preview") && <Preview content={content} />}
     </div>
   );
 }
