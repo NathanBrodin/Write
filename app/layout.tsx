@@ -8,6 +8,7 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -50,6 +51,7 @@ export default function RootLayout({
               {children}
               <Toaster />
               <ModalProvider />
+              <TailwindIndicator />
             </ThemeProvider>
           </EdgeStoreProvider>
         </ConvexClientProvider>

@@ -33,7 +33,7 @@ export default function ToggleEditor({
   return (
     <div
       className={cn(
-        "h-full min-h-screen w-full py-24",
+        "h-max min-h-screen w-full py-24",
         mode.length <= 1 && "flex justify-center",
         mode.length > 1 && "grid grid-cols-2 gap-4 px-2",
       )}
