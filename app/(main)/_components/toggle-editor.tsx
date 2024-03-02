@@ -14,7 +14,7 @@ export default function ToggleEditor({
   initialContent,
   onChange,
 }: ToggleEditorProps) {
-  const [mode, setMode] = useLocalStorage<Mode[]>("mode", ["code"]);
+  const [mode] = useLocalStorage<Mode[]>("mode", ["code"]);
   const [content, setContent] = useState<string>(initialContent || "");
   const [debouncedContent, setDebouncedContent] = useDebounceValue(
     content,

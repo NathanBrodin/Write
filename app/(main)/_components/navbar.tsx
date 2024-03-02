@@ -60,7 +60,11 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
               size={"sm"}
               value={mode}
               onValueChange={(values) => {
-                if (values) setMode(values as Mode[]);
+                if (values.length === 0) {
+                  // Prevent all items from being toggled off
+                  return;
+                }
+                setMode(values as Mode[]);
               }}
             >
               <ToggleGroupItem value="code">
