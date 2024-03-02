@@ -65,11 +65,7 @@ export function SearchCommand() {
               title={document.title}
               onSelect={onSelect}
             >
-              {document.icon ? (
-                <p className="mr-2 text-[18px]">{document.icon}</p>
-              ) : (
-                <File className="mr-2 w-4 h-4" />
-              )}
+              <File className="mr-2 h-4 w-4" />
               <span>{document.title}</span>
             </CommandItem>
           ))}
