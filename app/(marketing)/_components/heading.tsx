@@ -11,35 +11,35 @@ export default function Heading() {
 
   return (
     <div className="max-w-3xl space-y-4">
-      <h1 className="text-3-xl sm:text-5xl md:text-6xl font-bold">
+      <h1 className="text-3-xl font-bold sm:text-5xl md:text-6xl">
         Capture, Collaborate, Create. Welcome to{" "}
-        <span className="underline">Note</span>
+        <span className="underline">Write</span>
       </h1>
-      <h3 className="text-base sm:text-xl md:text-2xl font-medium">
-        Note is your all-in-one platform for <br />
+      <h3 className="text-base font-medium sm:text-xl md:text-2xl">
+        Write is your all-in-one platform for <br />
         seamless collaboration and creativity.
       </h3>
       {isLoading && (
-        <div className="w-full flex items-center justify-center">
+        <div className="flex w-full items-center justify-center">
           <Button disabled>
-            Enter Note
-            <ArrowRight className="h-4 w-4 ml-2" />
+            Enter Write
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
       )}
       {isAuthenticated && !isLoading && (
         <Button asChild>
           <Link href="/projects">
-            Enter Note
-            <ArrowRight className="h-4 w-4 ml-2" />
+            Enter Write
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Link>
         </Button>
       )}
       {!isAuthenticated && !isLoading && (
         <SignInButton mode="modal" redirectUrl="/projects">
           <Button>
-            Enter Note
-            <ArrowRight className="h-4 w-4 ml-2" />
+            Enter Write
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </SignInButton>
       )}

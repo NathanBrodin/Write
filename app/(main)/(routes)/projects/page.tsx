@@ -15,7 +15,7 @@ export default function DocumentsPage() {
   }
 
   return (
-    <div className="h-full flex flex-col items-center justify-center space-y-4">
+    <div className="flex h-full flex-col items-center justify-center space-y-4">
       <Image
         src="/empty.png"
         height="300"
@@ -31,10 +31,10 @@ export default function DocumentsPage() {
         className="hidden dark:block"
       />
       <h2 className="text-lg font-medium">
-        Welcome to {user?.firstName}&apos;s Note
+        Welcome to {user?.firstName}&apos;s Notes
       </h2>
       <Button onClick={onCreate}>
-        <PlusCircle className="h-4 w-4 mr-2" />
+        <PlusCircle className="mr-2 h-4 w-4" />
         Create a new project
       </Button>
     </div>

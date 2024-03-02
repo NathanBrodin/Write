@@ -5,7 +5,6 @@ import { useQuery } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import ProjectItem from "./project-item";
-import { cn } from "@/lib/utils";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import DocumentList from "./document-list";
 import Item from "./item";
@@ -53,7 +52,9 @@ export default function ProjectList({ parentProjectId }: DocumentListProps) {
             onExpand={() => onExpand(project._id)}
             expanded={expanded[project._id]}
           />
-          {expanded[project._id] && <DocumentList parentProjectId={project._id} />}
+          {expanded[project._id] && (
+            <DocumentList parentProjectId={project._id} />
+          )}
         </div>
       ))}
     </>

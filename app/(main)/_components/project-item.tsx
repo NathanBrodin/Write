@@ -18,7 +18,6 @@ import {
   ChevronDown,
   ChevronRight,
   FolderIcon,
-  FolderPen,
   MoreHorizontal,
   Plus,
   Trash,
@@ -70,7 +69,7 @@ export default function ProjectItem({
         }
 
         router.push(`/projects/${id}/${documentId}`);
-      }
+      },
     );
 
     toast.promise(promise, {
@@ -103,27 +102,27 @@ export default function ProjectItem({
       role="button"
       style={{ paddingLeft: "12px" }}
       className={cn(
-        "group min-h-[27px] text-sm py-1 pr-3 w-full hover:bg-primary/5 flex items-center text-muted-foreground font-medium",
-        active && "bg-primary/5 text-primary"
+        "hover:bg-primary/5 text-muted-foreground group flex min-h-[27px] w-full items-center py-1 pr-3 text-sm font-medium",
+        active && "bg-primary/5 text-primary",
       )}
     >
       <div
         role="button"
-        className="h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600 mr-1"
+        className="mr-1 h-full rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
         onClick={handleExpand}
       >
-        <ChevronIcon className="h-4 w-4 shrink-0 text-muted-foreground/50" />
+        <ChevronIcon className="text-muted-foreground/50 h-4 w-4 shrink-0" />
       </div>
-      <FolderIcon className="shrink-0 h-[18px] w-[18px] mr-2 text-muted-foreground" />
+      <FolderIcon className="text-muted-foreground mr-2 h-[18px] w-[18px] shrink-0" />
       <span className="truncate">{label}</span>
       <div className="ml-auto flex items-center gap-x-2">
         <DropdownMenu>
           <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
             <div
               role="button"
-              className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+              className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
             >
-              <MoreHorizontal className="h-4 w-4 text-muted-foreground" />
+              <MoreHorizontal className="text-muted-foreground h-4 w-4" />
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent
@@ -136,11 +135,11 @@ export default function ProjectItem({
               {project && <ProjectTitle initialData={project} />}
             </DropdownMenuLabel>
             <DropdownMenuItem onClick={onArchive}>
-              <Trash className="w-4 h-4 mr-2" />
+              <Trash className="mr-2 h-4 w-4" />
               Delete
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <div className="text-xs text-muted-foreground p-2">
+            <div className="text-muted-foreground p-2 text-xs">
               Last edited by: {user?.fullName}
             </div>
           </DropdownMenuContent>
@@ -148,9 +147,9 @@ export default function ProjectItem({
         <div
           role="button"
           onClick={onCreate}
-          className="opacity-0 group-hover:opacity-100 h-full ml-auto rounded-sm hover:bg-neutral-300 dark:hover:bg-neutral-600"
+          className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
         >
-          <Plus className="w-4 h-4 text-muted-foreground" />
+          <Plus className="text-muted-foreground h-4 w-4" />
         </div>
       </div>
     </div>
