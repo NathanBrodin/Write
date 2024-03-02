@@ -15,6 +15,7 @@ import {
   ImageIcon,
 } from "lucide-react";
 import { Button } from "./ui/button";
+import { useLocalStorage } from "usehooks-ts";
 
 export default function FormattingToolbar({
   insertText,
@@ -47,20 +48,32 @@ export default function FormattingToolbar({
         "| Header | Title |\n| ----------- | ----------- |\n| Paragraph | Text |",
     },
   ];
+  const [hidden, setHidden] = useLocalStorage<boolean>("toolbar", false);
 
   return (
-    <ul className="flex gap-x-1">
-      {options.map((option, index) => (
-        <li key={index}>
+    !hidden && (
+      <ul className="group mb-2 flex gap-x-0.5">
+        {options.map((option, index) => (
+          <li key={index}>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => insertText(option.syntax)}
+            >
+              <option.icon className="h-4 w-4" />
+            </Button>
+          </li>
+        ))}
+        <li>
           <Button
-            variant="outline"
-            size="sm"
-            onClick={() => insertText(option.syntax)}
+            variant={"ghost"}
+            className="text-gray-300 opacity-0 transition group-hover:opacity-100 dark:text-gray-500"
+            onClick={() => setHidden(!hidden)}
           >
-            <option.icon className="h-4 w-4" />
+            Hide Toolbar
           </Button>
         </li>
-      ))}
-    </ul>
+      </ul>
+    )
   );
 }
