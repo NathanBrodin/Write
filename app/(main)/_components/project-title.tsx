@@ -9,12 +9,12 @@ import { useMutation } from "convex/react";
 import { useRef, useState } from "react";
 
 interface TitleProps {
-  initialData: Doc<"documents">;
+  initialData: Doc<"projects">;
 }
 
-export function Title({ initialData }: TitleProps) {
+export function ProjectTitle({ initialData }: TitleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const update = useMutation(api.documents.update);
+  const update = useMutation(api.projects.update);
 
   const [title, setTitle] = useState(initialData.title || "Untitled");
   const [isEditing, setIsEditing] = useState(false);
@@ -72,6 +72,6 @@ export function Title({ initialData }: TitleProps) {
   );
 }
 
-Title.Skeleton = function TitleSkeletion() {
+ProjectTitle.Skeleton = function TitleSkeletion() {
   return <Skeleton className="h-6 w-20 rounded-md" />;
 };

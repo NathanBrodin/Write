@@ -1,68 +1,89 @@
 "user client";
 
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { ChevronsLeftRight } from "lucide-react";
 import { SignOutButton, useUser } from "@clerk/clerk-react";
+import { Label } from "@/components/ui/label";
+import { ModeToggle } from "@/components/mode-toggle";
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
+import { Separator } from "@/components/ui/separator";
+import { Button } from "@/components/ui/button";
+import { Toggle } from "@/components/ui/toggle";
+import { useLocalStorage } from "usehooks-ts";
+import { PencilRuler } from "lucide-react";
 
 export function UserItem() {
   const { user } = useUser();
+  const [hidden, setHidden] = useLocalStorage<boolean>("toolbar", false);
+
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
+    <Dialog>
+      <DialogTrigger asChild>
         <div
           role="button"
-          className="flex items-center text-sm p-3 w-full hover:bg-primary/5"
+          className="hover:bg-primary/5 flex w-full items-center p-3 text-sm"
         >
-          <div className="gap-x-2 flex items-center max-w-[150px]">
+          <div className="flex max-w-[150px] items-center gap-x-2">
             <Avatar className="h-5 w-5">
               <AvatarImage src={user?.imageUrl} />
             </Avatar>
-            <span className="text-start font-medium line-clamp-1">
+            <span className="line-clamp-1 text-start font-medium">
               {user?.fullName}&apos;s Notion
             </span>
           </div>
-          <ChevronsLeftRight className="h-4 w-4 rotate-90 ml-2 text-muted-foreground" />
         </div>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent
-        className="w-80"
-        align="start"
-        alignOffset={11}
-        forceMount
-      >
+      </DialogTrigger>
+      <DialogContent className="w-96 space-y-2">
         <div className="flex flex-col space-y-4 p-2">
-          <p className="text-sm font-medium leading-none text-muted-foreground">
+          <p className="text-muted-foreground text-sm font-medium leading-none">
             {user?.emailAddresses[0].emailAddress}
           </p>
           <div className="flex items-center gap-x-2">
-            <div className="rounded-md bg-secondary p-1">
+            <div className="bg-secondary rounded-md p-1">
               <Avatar className="h-8 w-8">
                 <AvatarImage src={user?.imageUrl} />
               </Avatar>
             </div>
             <div className="space-y-1">
-              <p className="text-sm line-clamp-1">
+              <p className="line-clamp-1 text-sm">
                 {user?.fullName}&apos;s Notion
               </p>
             </div>
           </div>
         </div>
-        <DropdownMenuSeparator />
-        <DropdownMenuItem
-          className="w-full cursor-pointer text-muted-foreground"
+        <Separator />
+        <div className="flex justify-between">
+          <div className="flex flex-col space-y-2">
+            <Label>Appearance</Label>
+            <span className="text-muted-foreground text-[0.8rem]">
+              Customize how Notion looks on your device
+            </span>
+          </div>
+          <ModeToggle />
+        </div>
+        <div className="flex justify-between">
+          <div className="flex flex-col space-y-2">
+            <Label>Formatting Toolbar</Label>
+            <span className="text-muted-foreground text-[0.8rem]">
+              Hide or show the formatting toolbar
+            </span>
+          </div>
+          <Toggle
+            variant="outline"
+            pressed={!hidden}
+            onPressedChange={(value) => setHidden(!value)}
+          >
+            <PencilRuler className="h-4 w-4" />
+          </Toggle>
+        </div>
+        <Separator />
+        <Button
+          className="text-muted-foreground w-full cursor-pointer"
           asChild
+          variant="outline"
         >
           <SignOutButton>Sign out</SignOutButton>
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+        </Button>
+      </DialogContent>
+    </Dialog>
   );
 }

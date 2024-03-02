@@ -1,14 +1,17 @@
 "use client";
 
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery } from "convex/react";
-import { MenuIcon } from "lucide-react";
+import { FileCode2, FileText, MenuIcon } from "lucide-react";
 import { useParams } from "next/navigation";
 import { Title } from "./title";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
-import Publish from "./publish";
+import Share from "./share";
+import { Mode } from "@/lib/types";
+import { useLocalStorage } from "usehooks-ts";
 
 interface NavbarProps {
   isCollapsed: boolean;
@@ -21,9 +24,11 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
     documentId: params.documentId as Id<"documents">,
   });
 
+  const [mode, setMode] = useLocalStorage<Mode[]>("mode", ["code"]);
+
   if (document === undefined) {
     return (
-      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex justify-between items-center">
+      <nav className="bg-background flex w-full items-center justify-between px-3 py-2 dark:bg-[#1F1F1F]">
         <Title.Skeleton />
         <div className="flex items-center gap-x-2">
           <Menu.Skeleton />
@@ -38,18 +43,38 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
 
   return (
     <>
-      <nav className="bg-background dark:bg-[#1F1F1F] px-3 py-2 w-full flex items-center gap-x-4">
+      <nav className="bg-background flex w-full items-center gap-x-4 px-3 py-2 dark:bg-[#1F1F1F]">
         {isCollapsed && (
           <MenuIcon
             role="button"
             onClick={onResetWidth}
-            className="h-6 w-6 text-muted-foreground"
+            className="text-muted-foreground h-6 w-6"
           />
         )}
-        <div className="flex items-center justify-between w-full">
+        <div className="flex w-full items-center justify-between">
           <Title initialData={document} />
           <div className="flex items-center gap-x-2">
-            <Publish initialData={document} />
+            <ToggleGroup
+              type="multiple"
+              variant="outline"
+              size={"sm"}
+              value={mode}
+              onValueChange={(values) => {
+                if (values.length === 0) {
+                  // Prevent all items from being toggled off
+                  return;
+                }
+                setMode(values as Mode[]);
+              }}
+            >
+              <ToggleGroupItem value="code">
+                <FileCode2 className="h-4 w-4" />
+              </ToggleGroupItem>
+              <ToggleGroupItem value="preview">
+                <FileText className="h-4 w-4" />
+              </ToggleGroupItem>
+            </ToggleGroup>
+            <Share initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>

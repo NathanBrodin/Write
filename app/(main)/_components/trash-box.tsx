@@ -3,6 +3,7 @@
 import { ConfirmModal } from "@/components/modals/confirm-modal";
 import Spinner from "@/components/spinner";
 import { Input } from "@/components/ui/input";
+import { Separator } from "@/components/ui/separator";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { useQuery, useMutation } from "convex/react";
@@ -14,46 +15,97 @@ import { toast } from "sonner";
 export default function TrashBox() {
   const router = useRouter();
   const params = useParams();
+
+  const projects = useQuery(api.projects.getTrash);
+  const restoreProject = useMutation(api.projects.restore);
+  const removeProject = useMutation(api.projects.remove);
+
   const documents = useQuery(api.documents.getTrash);
-  const restore = useMutation(api.documents.restore);
-  const remove = useMutation(api.documents.remove);
+  const restoreDocument = useMutation(api.documents.restore);
+  const removeDocument = useMutation(api.documents.remove);
 
   const [search, setSearch] = useState("");
+
+  const filteredProjects = projects?.filter((project) => {
+    return project.title.toLocaleLowerCase().includes(search.toLowerCase());
+  });
 
   const filteredDocuments = documents?.filter((document) => {
     return document.title.toLocaleLowerCase().includes(search.toLowerCase());
   });
 
-  function onClick(documentId: string) {
-    router.push(`/documents/${documentId}`);
+  function onDocumentClick(
+    documentId: Id<"documents">,
+    parentProjectId?: Id<"projects">
+  ) {
+    if (!parentProjectId) return;
+
+    router.push(`/projects/${parentProjectId}/${documentId}`);
   }
 
-  function onRestore(
+  function onProjectClick(projectId: Id<"projects">) {
+    router.push(`/projects/${projectId}`);
+  }
+
+  function onDocumentRestore(
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
     documentId: Id<"documents">
   ) {
     event.stopPropagation();
-    const promise = restore({ id: documentId });
+    const promise = restoreDocument({ id: documentId });
 
     toast.promise(promise, {
-      loading: "Restoring note...",
-      success: "Note restored!",
-      error: "Failed to restore note.",
+      loading: "Restoring document...",
+      success: "Document restored!",
+      error: "Failed to restore document.",
     });
   }
 
-  function onRemove(documentId: Id<"documents">) {
-    const promise = remove({ id: documentId });
+  function onProjectRestore(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    projectId: Id<"projects">
+  ) {
+    event.stopPropagation();
+    const promise = restoreProject({ id: projectId });
 
     toast.promise(promise, {
-      loading: "Deleting note...",
-      success: "Note deleted!",
-      error: "Failed to delete note.",
+      loading: "Restoring project...",
+      success: "Project restored!",
+      error: "Failed to restore project.",
+    });
+  }
+
+  function onDocumentRemove(
+    documentId: Id<"documents">,
+    parentProjectId?: Id<"projects">
+  ) {
+    const promise = removeDocument({ id: documentId });
+
+    toast.promise(promise, {
+      loading: "Deleting document...",
+      success: "Document deleted!",
+      error: "Failed to delete document.",
     });
 
     if (params.documentId == documentId) {
-      router.push(`/documents`);
+      if (parentProjectId) {
+        router.push(`/projects/${parentProjectId}`);
+      } else {
+        router.push(`/projects`);
+      }
     }
+  }
+
+  function onProjectRemove(projectId: Id<"projects">) {
+    const promise = removeProject({ id: projectId });
+
+    toast.promise(promise, {
+      loading: "Deleting project...",
+      success: "Project deleted!",
+      error: "Failed to delete project.",
+    });
+
+    router.push(`/projects`);
   }
 
   if (documents === undefined) {
@@ -76,26 +128,64 @@ export default function TrashBox() {
         />
       </div>
       <div className="mt-2 px-1 pb-1">
-        <p className="hidden last:block text-sm text-center text-muted-foreground pb-2">
-          No documents found.
-        </p>
-        {filteredDocuments?.map((document) => (
+        {filteredDocuments?.length === 0 && filteredProjects?.length === 0 && (
+          <p className="text-sm text-center text-muted-foreground pb-2">
+            Trashbox is empty
+          </p>
+        )}
+        {filteredProjects?.map((project) => (
           <div
-            key={document._id}
+            key={project._id}
             role="button"
-            onClick={() => onClick(document._id)}
+            onClick={() => onProjectClick(project._id)}
             className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
           >
-            <span className="truncate pl-2">{document.title}</span>
+            <span className="truncate pl-2">{project.title}</span>
             <div className="flex items-center">
               <div
-                onClick={(e) => onRestore(e, document._id)}
+                onClick={(e) => onProjectRestore(e, project._id)}
                 role="button"
                 className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
               >
                 <Undo className="w-4 h-4 text-muted-foreground" />
               </div>
-              <ConfirmModal onConfirm={() => onRemove(document._id)}>
+              <ConfirmModal onConfirm={() => onProjectRemove(project._id)}>
+                <div
+                  role="button"
+                  className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+                >
+                  <Trash className="w-4 h-4 text-muted-foreground" />
+                </div>
+              </ConfirmModal>
+            </div>
+          </div>
+        ))}
+        {filteredDocuments?.length !== 0 && (
+          <Separator className="mt-2" />
+        )}
+        {filteredDocuments?.map((document) => (
+          <div
+            key={document._id}
+            role="button"
+            onClick={() =>
+              onDocumentClick(document._id, document.parentProject)
+            }
+            className="text-sm rounded-sm w-full hover:bg-primary/5 flex items-center text-primary justify-between"
+          >
+            <span className="truncate pl-2">{document.title}</span>
+            <div className="flex items-center">
+              <div
+                onClick={(e) => onDocumentRestore(e, document._id)}
+                role="button"
+                className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"
+              >
+                <Undo className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <ConfirmModal
+                onConfirm={() =>
+                  onDocumentRemove(document._id, document.parentProject)
+                }
+              >
                 <div
                   role="button"
                   className="rounded-sm p-2 hover:bg-neutral-200 dark:hover:bg-neutral-600"

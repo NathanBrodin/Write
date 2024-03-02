@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { Toaster } from "sonner";
+import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
 import { ModalProvider } from "@/components/providers/modal-provider";
 import { EdgeStoreProvider } from "@/lib/edgestore";
+import { TailwindIndicator } from "@/components/tailwind-indicator";
 
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Notion",
-  description: "All your notes in one place",
+  title: "Write",
+  description: "Capture, Collaborate, Create.",
   icons: {
     icon: [
       {
@@ -45,11 +46,12 @@ export default function RootLayout({
               defaultTheme="system"
               enableSystem
               disableTransitionOnChange
-              storageKey="notion-theme"
+              storageKey="note-theme"
             >
               {children}
-              <Toaster position="bottom-center" />
+              <Toaster />
               <ModalProvider />
+              <TailwindIndicator />
             </ThemeProvider>
           </EdgeStoreProvider>
         </ConvexClientProvider>
