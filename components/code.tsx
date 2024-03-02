@@ -4,6 +4,7 @@ import {
   oneDark,
   oneLight,
 } from "react-syntax-highlighter/dist/cjs/styles/prism";
+import { CopyButton } from "@/components/copy-button";
 
 export function CodeBlock({ ...props }) {
   const { resolvedTheme } = useTheme();
@@ -22,5 +23,15 @@ export function CodeBlock({ ...props }) {
 }
 
 export function Pre({ ...props }) {
-  return <div className="not-prose">{props.children}</div>;
+  const codeString = props.children.props.children;
+
+  return (
+    <div className="not-prose group relative">
+      <CopyButton
+        content={codeString}
+        className="absolute right-1 top-1 opacity-0 group-hover:opacity-100"
+      />
+      {props.children}
+    </div>
+  );
 }
