@@ -30,11 +30,11 @@ export default function Editor({ content, setContent }: EditorProps) {
     <CodeMirror
       value={content}
       onChange={setContent}
-      className="flex h-full min-h-screen w-full max-w-3xl text-base"
-      maxWidth="48rem"
+      className="mx-auto flex h-full min-h-screen w-full max-w-3xl px-4 text-base md:max-w-3xl lg:max-w-4xl"
       extensions={[
         styleTheme,
         MD({ base: markdownLanguage, codeLanguages: languages }),
+        EditorView.lineWrapping,
       ]}
       theme={resolvedTheme === "dark" ? githubDark : githubLight}
       basicSetup={{
