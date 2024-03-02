@@ -131,7 +131,7 @@ const components = {
 };
 
 export default function Preview({ content }: { content?: string }) {
-  const options = { code: CodeBlock, pre: Pre, ...components };
+  const options = {  pre: Pre, code: CodeBlock, ...components };
 
   return (
     <Markdown

@@ -1,5 +1,6 @@
 import { useTheme } from "next-themes";
 import { Prism } from "react-syntax-highlighter";
+// https://github.com/react-syntax-highlighter/react-syntax-highlighter/blob/master/AVAILABLE_STYLES_PRISM.MD
 import {
   oneDark,
   oneLight,
@@ -8,6 +9,15 @@ import { CopyButton } from "@/components/copy-button";
 
 export function CodeBlock({ ...props }) {
   const { resolvedTheme } = useTheme();
+
+  // Inline code
+  if (!props.className?.includes("language" || "language")) {
+    return (
+      <code className="bg-muted relative rounded px-[0.3rem] py-[0.2rem] font-mono text-sm">
+        {props.children}
+      </code>
+    );
+  }
 
   return (
     <Prism
