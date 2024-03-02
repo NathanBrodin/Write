@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import Editor from "./editor";
-import Preview from "./preview";
 import { Mode } from "@/lib/types";
 import { useDebounceValue, useLocalStorage } from "usehooks-ts";
+import { cn } from "@/lib/utils";
+import Editor from "@/components/editor";
+import Preview from "@/components/preview";
 
 interface ToggleEditorProps {
   initialContent?: string;
@@ -30,7 +31,13 @@ export default function ToggleEditor({
   }
 
   return (
-    <div className="flex h-full min-h-screen w-full justify-center pt-14">
+    <div
+      className={cn(
+        "h-full min-h-screen w-full py-24",
+        mode.length <= 1 && "flex justify-center",
+        mode.length > 1 && "grid grid-cols-2 gap-4 px-2",
+      )}
+    >
       {mode.includes("code") && (
         <Editor content={content} setContent={handleContentChange} />
       )}

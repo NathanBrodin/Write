@@ -1,6 +1,6 @@
 "use client";
 
-import ToggleEditor from "@/components/toggle-editor";
+import ToggleEditor from "@/app/(main)/_components/toggle-editor";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";

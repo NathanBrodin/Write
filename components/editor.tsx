@@ -30,7 +30,8 @@ export default function Editor({ content, setContent }: EditorProps) {
     <CodeMirror
       value={content}
       onChange={setContent}
-      className="h-full min-h-screen w-full max-w-3xl text-base focus:outline-none"
+      className="flex h-full min-h-screen w-full max-w-3xl text-base"
+      maxWidth="48rem"
       extensions={[
         styleTheme,
         MD({ base: markdownLanguage, codeLanguages: languages }),
