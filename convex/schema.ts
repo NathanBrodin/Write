@@ -5,6 +5,7 @@ export default defineSchema({
   projects: defineTable({
     title: v.string(),
     userId: v.string(),
+    images: v.array(v.string()),
     isArchived: v.boolean(),
     isPublished: v.boolean(),
   }).index("by_user", ["userId"]),

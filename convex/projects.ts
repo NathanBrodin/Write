@@ -17,6 +17,7 @@ export const create = mutation({
     const project = await ctx.db.insert("projects", {
       title: args.title,
       userId,
+      images: [],
       isArchived: false,
       isPublished: false,
     });
@@ -28,7 +29,8 @@ export const create = mutation({
 export const update = mutation({
   args: {
     id: v.id("projects"),
-    title: v.string(),
+    title: v.optional(v.string()),
+    image: v.optional(v.string()),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -39,19 +41,24 @@ export const update = mutation({
 
     const userId = identity.subject;
 
-    const { id, ...rest } = args;
+    const { id, image, ...rest } = args;
 
-    const existingDocument = await ctx.db.get(id);
+    const existingProject = await ctx.db.get(id);
 
-    if (!existingDocument) {
+    if (!existingProject) {
       throw new Error("Not found");
     }
 
-    if (existingDocument.userId !== userId) {
+    if (existingProject.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    const document = await ctx.db.patch(id, rest);
+    const images = [...existingProject.images, image!];
+
+    const document = await ctx.db.patch(id, {
+      images: images,
+      ...rest,
+    });
 
     return document;
   },
@@ -107,6 +114,31 @@ export const getSidebar = query({
   },
 });
 
+export const getImages = query({
+  args: { projectId: v.id("projects") },
+  handler: async (ctx, args) => {
+    const identity = await ctx.auth.getUserIdentity();
+
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
+    const project = await ctx.db.get(args.projectId);
+
+    if (!project) {
+      throw new Error("Not found");
+    }
+
+    if (project.userId !== userId) {
+      throw new Error("Not authorized");
+    }
+
+    return project.images;
+  },
+});
+
 export const archive = mutation({
   args: {
     id: v.id("projects"),
@@ -133,7 +165,7 @@ export const archive = mutation({
     const documents = await ctx.db
       .query("documents")
       .withIndex("by_user_parent", (q) =>
-        q.eq("userId", userId).eq("parentProject", args.id)
+        q.eq("userId", userId).eq("parentProject", args.id),
       )
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
@@ -177,7 +209,7 @@ export const restore = mutation({
     const documents = await ctx.db
       .query("documents")
       .withIndex("by_user_parent", (q) =>
-        q.eq("userId", userId).eq("parentProject", args.id)
+        q.eq("userId", userId).eq("parentProject", args.id),
       )
       .filter((q) => q.eq(q.field("isArchived"), true))
       .collect();
@@ -222,7 +254,7 @@ export const remove = mutation({
     const documents = await ctx.db
       .query("documents")
       .withIndex("by_user_parent", (q) =>
-        q.eq("userId", userId).eq("parentProject", args.id)
+        q.eq("userId", userId).eq("parentProject", args.id),
       )
       .filter((q) => q.eq(q.field("isArchived"), true))
       .collect();

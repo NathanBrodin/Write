@@ -17,7 +17,9 @@ import { useMutation, useQuery } from "convex/react";
 import {
   ChevronDown,
   ChevronRight,
+  FileText,
   FolderIcon,
+  ImagePlus,
   MoreHorizontal,
   Plus,
   Trash,
@@ -26,9 +28,10 @@ import { useRouter } from "next/navigation";
 import React from "react";
 import { toast } from "sonner";
 import { ProjectTitle } from "./project-title";
+import { useUploadImage } from "@/hooks/use-upload-image";
 
 interface ItemProps {
-  id: Id<"projects">;
+  projectId: Id<"projects">;
   active?: boolean;
   expanded?: boolean;
   onExpand?: () => void;
@@ -37,7 +40,7 @@ interface ItemProps {
 }
 
 export default function ProjectItem({
-  id,
+  projectId,
   active,
   expanded,
   onExpand,
@@ -47,10 +50,11 @@ export default function ProjectItem({
   const { user } = useUser();
   const router = useRouter();
   const project = useQuery(api.projects.getById, {
-    projectId: id,
+    projectId: projectId,
   });
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.projects.archive);
+  const uploadImage = useUploadImage();
 
   function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
@@ -58,19 +62,22 @@ export default function ProjectItem({
     onExpand?.();
   }
 
-  function onCreate(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
+  function onCreateDocument(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
     event.stopPropagation();
-    if (!id) return;
+    if (!projectId) return;
 
-    const promise = create({ title: "Untitled", parentProject: id }).then(
-      (documentId) => {
-        if (!expanded) {
-          onExpand?.();
-        }
+    const promise = create({
+      title: "Untitled",
+      parentProject: projectId,
+    }).then((documentId) => {
+      if (!expanded) {
+        onExpand?.();
+      }
 
-        router.push(`/projects/${id}/${documentId}`);
-      },
-    );
+      router.push(`/projects/${projectId}/${documentId}`);
+    });
 
     toast.promise(promise, {
       loading: "Creating a new document...",
@@ -79,11 +86,20 @@ export default function ProjectItem({
     });
   }
 
+  async function onCreateImage(
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) {
+    event.stopPropagation();
+    if (!projectId) return;
+
+    uploadImage.onOpen(projectId);
+  }
+
   function onArchive(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
-    if (!id) return;
+    if (!projectId) return;
 
-    const promise = archive({ id }).then(() => {
+    const promise = archive({ id: projectId }).then(() => {
       router.push("/projects");
     });
 
@@ -144,13 +160,23 @@ export default function ProjectItem({
             </div>
           </DropdownMenuContent>
         </DropdownMenu>
-        <div
-          role="button"
-          onClick={onCreate}
-          className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600"
-        >
-          <Plus className="text-muted-foreground h-4 w-4" />
-        </div>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild onClick={(e) => e.stopPropagation()}>
+            <div className="ml-auto h-full rounded-sm opacity-0 hover:bg-neutral-300 group-hover:opacity-100 dark:hover:bg-neutral-600">
+              <Plus className="text-muted-foreground h-4 w-4" />
+            </div>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent>
+            <DropdownMenuItem onClick={onCreateDocument}>
+              <FileText className="mr-2 h-4 w-4" />
+              Add a new document
+            </DropdownMenuItem>
+            <DropdownMenuItem onClick={onCreateImage}>
+              <ImagePlus className="mr-2 h-4 w-4" />
+              Add a new image
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </div>
   );

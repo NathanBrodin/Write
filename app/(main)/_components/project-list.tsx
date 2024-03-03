@@ -8,6 +8,7 @@ import ProjectItem from "./project-item";
 import { Doc, Id } from "@/convex/_generated/dataModel";
 import DocumentList from "./document-list";
 import Item from "./item";
+import ImageList from "./image-list";
 
 interface DocumentListProps {
   parentProjectId?: Id<"projects">;
@@ -45,13 +46,14 @@ export default function ProjectList({ parentProjectId }: DocumentListProps) {
       {projects.map((project) => (
         <div key={project._id}>
           <ProjectItem
-            id={project._id}
+            projectId={project._id}
             onClick={() => onRedirect(project._id)}
             label={project.title}
             active={params.projectId === project._id}
             onExpand={() => onExpand(project._id)}
             expanded={expanded[project._id]}
           />
+          {expanded[project._id] && <ImageList parentProjectId={project._id} />}
           {expanded[project._id] && (
             <DocumentList parentProjectId={project._id} />
           )}

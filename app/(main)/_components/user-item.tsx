@@ -27,7 +27,7 @@ export function UserItem() {
               <AvatarImage src={user?.imageUrl} />
             </Avatar>
             <span className="line-clamp-1 text-start font-medium">
-              {user?.fullName}&apos;s Notion
+              {user?.fullName}&apos;s Notes
             </span>
           </div>
         </div>
@@ -45,7 +45,7 @@ export function UserItem() {
             </div>
             <div className="space-y-1">
               <p className="line-clamp-1 text-sm">
-                {user?.fullName}&apos;s Notion
+                {user?.fullName}&apos;s Notes
               </p>
             </div>
           </div>
@@ -55,7 +55,7 @@ export function UserItem() {
           <div className="flex flex-col space-y-2">
             <Label>Appearance</Label>
             <span className="text-muted-foreground text-[0.8rem]">
-              Customize how Notion looks on your device
+              Customize how Write looks on your device
             </span>
           </div>
           <ModeToggle />

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { NewProjectModal } from "../modals/new-project-modal";
+import UploadImageModal from "../modals/upload-image-modal";
 
 export function ModalProvider() {
   const [isMounted, setIsMounted] = useState(false);
@@ -16,6 +17,7 @@ export function ModalProvider() {
 
   return (
     <>
+      <UploadImageModal />
       <NewProjectModal />
     </>
   );
