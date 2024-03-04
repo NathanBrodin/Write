@@ -58,7 +58,6 @@ export default function ProjectItem({
 
   function handleExpand(event: React.MouseEvent<HTMLDivElement, MouseEvent>) {
     event.stopPropagation();
-
     onExpand?.();
   }
 
@@ -106,7 +105,7 @@ export default function ProjectItem({
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
-      error: "Failed to archive note.",
+      error: "Failed to archive project.",
     });
   }
 

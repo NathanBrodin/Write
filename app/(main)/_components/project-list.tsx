@@ -45,16 +45,15 @@ export default function ProjectList() {
         <div key={project._id}>
           <ProjectItem
             projectId={project._id}
+            projectTitle={project.title}
             label={project.title}
             onClick={() => onRedirect(project._id)}
             active={params.projectId === project._id}
             onExpand={() => onExpand(project._id)}
             expanded={expanded[project._id]}
           />
-          {expanded[project._id] && <ImageList parentProjectId={project._id} />}
-          {expanded[project._id] && (
-            <DocumentList parentProjectId={project._id} />
-          )}
+          {expanded[project._id] && <ImageList projectId={project._id} />}
+          {expanded[project._id] && <DocumentList projectId={project._id} />}
         </div>
       ))}
     </>

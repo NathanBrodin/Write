@@ -10,7 +10,7 @@ import { api } from "@/convex/_generated/api";
 import { toast } from "sonner";
 
 export default function UploadImageModal() {
-  const update = useMutation(api.projects.update);
+  const create = useMutation(api.images.create);
   const uploadImage = useUploadImage();
   const { edgestore } = useEdgeStore();
 
@@ -33,14 +33,17 @@ export default function UploadImageModal() {
           },
         })
         .then((res) => {
-          const updatePromise = update({
-            id: uploadImage.projectId!,
-            image: res.url,
+          const updatePromise = create({
+            title: file.name,
+            url: res.url,
+            projectId: uploadImage.projectId!,
           });
+
+          navigator.clipboard.writeText(res.url);
 
           toast.promise(updatePromise, {
             loading: "Updating project...",
-            success: "Project updated",
+            success: "Image url copied to clipboard",
             error: "Failed to update project",
           });
         });

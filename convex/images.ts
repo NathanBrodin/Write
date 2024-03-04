@@ -97,6 +97,12 @@ export const getByProjectId = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
+    if (!identity) {
+      throw new Error("Not authenticated");
+    }
+
+    const userId = identity.subject;
+
     const images = await ctx.db
       .query("images")
       .withIndex("by_user_project", (q) =>
@@ -105,24 +111,6 @@ export const getByProjectId = query({
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
       .collect();
-
-    if (!images) {
-      throw new Error("Not found");
-    }
-
-    if (images.every((d) => d.isPublished)) {
-      return images;
-    }
-
-    if (!identity) {
-      throw new Error("Not authenticated");
-    }
-
-    const userId = identity.subject;
-
-    if (images.every((d) => d.userId !== userId)) {
-      throw new Error("Not authorized");
-    }
 
     return images;
   },

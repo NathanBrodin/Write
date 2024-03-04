@@ -9,20 +9,20 @@ import { cn } from "@/lib/utils";
 import { FileCode2 } from "lucide-react";
 
 interface DocumentListProps {
-  parentProjectId: Id<"projects">;
+  projectId: Id<"projects">;
   data?: Doc<"documents">[];
 }
 
-export default function DocumentList({ parentProjectId }: DocumentListProps) {
+export default function DocumentList({ projectId }: DocumentListProps) {
   const params = useParams();
   const router = useRouter();
 
-  const documents = useQuery(api.documents.getSidebar, {
-    parentProject: parentProjectId,
+  const documents = useQuery(api.documents.getByProjectId, {
+    projectId: projectId,
   });
 
   function onRedirect(documentId: string) {
-    router.push(`/projects/${parentProjectId}/${documentId}`);
+    router.push(`/projects/${projectId}/${documentId}`);
   }
 
   if (documents === undefined) {
@@ -36,11 +36,11 @@ export default function DocumentList({ parentProjectId }: DocumentListProps) {
   return (
     <>
       <p
-      style={{
-        paddingLeft: "24px",
-      }}
+        style={{
+          paddingLeft: "24px",
+        }}
         className={cn(
-          "hidden text-sm font-medium text-muted-foreground/80",
+          "text-muted-foreground/80 hidden text-sm font-medium",
           documents.length === 0 ? "block" : "hidden",
         )}
       >
