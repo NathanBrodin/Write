@@ -5,7 +5,7 @@ export const create = mutation({
   args: {
     projectId: v.id("projects"),
     title: v.string(),
-    content: v.optional(v.string()),
+    url: v.string(),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -16,24 +16,24 @@ export const create = mutation({
 
     const userId = identity.subject;
 
-    const document = await ctx.db.insert("documents", {
+    const images = await ctx.db.insert("images", {
       title: args.title,
-      content: args.content,
+      url: args.url,
       projectId: args.projectId,
       userId,
       isArchived: false,
       isPublished: false,
     });
 
-    return document;
+    return images;
   },
 });
 
 export const update = mutation({
   args: {
-    id: v.id("documents"),
+    id: v.id("images"),
     title: v.optional(v.string()),
-    content: v.optional(v.string()),
+    url: v.optional(v.string()),
     isPublished: v.optional(v.boolean()),
   },
   handler: async (ctx, args) => {
@@ -47,35 +47,35 @@ export const update = mutation({
 
     const { id, ...rest } = args;
 
-    const existingDocument = await ctx.db.get(id);
+    const existingImage = await ctx.db.get(id);
 
-    if (!existingDocument) {
+    if (!existingImage) {
       throw new Error("Not found");
     }
 
-    if (existingDocument.userId !== userId) {
+    if (existingImage.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    const document = await ctx.db.patch(id, rest);
+    const images = await ctx.db.patch(id, rest);
 
-    return document;
+    return images;
   },
 });
 
 export const getById = query({
-  args: { documentId: v.id("documents") },
+  args: { imageId: v.id("images") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    const document = await ctx.db.get(args.documentId);
+    const image = await ctx.db.get(args.imageId);
 
-    if (!document) {
+    if (!image) {
       throw new Error("Not found");
     }
 
-    if (document.isPublished && !document.isArchived) {
-      return document;
+    if (image.isPublished && !image.isArchived) {
+      return image;
     }
 
     if (!identity) {
@@ -84,11 +84,11 @@ export const getById = query({
 
     const userId = identity.subject;
 
-    if (document.userId !== userId) {
+    if (image.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    return document;
+    return image;
   },
 });
 
@@ -97,8 +97,8 @@ export const getByProjectId = query({
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
-    const documents = await ctx.db
-      .query("documents")
+    const images = await ctx.db
+      .query("images")
       .withIndex("by_user_project", (q) =>
         q.eq("userId", userId).eq("projectId", args.projectId),
       )
@@ -106,12 +106,12 @@ export const getByProjectId = query({
       .order("desc")
       .collect();
 
-    if (!documents) {
+    if (!images) {
       throw new Error("Not found");
     }
 
-    if (documents.every((d) => d.isPublished)) {
-      return documents;
+    if (images.every((d) => d.isPublished)) {
+      return images;
     }
 
     if (!identity) {
@@ -120,17 +120,17 @@ export const getByProjectId = query({
 
     const userId = identity.subject;
 
-    if (documents.every((d) => d.userId !== userId)) {
+    if (images.every((d) => d.userId !== userId)) {
       throw new Error("Not authorized");
     }
 
-    return documents;
+    return images;
   },
 });
 
 export const archive = mutation({
   args: {
-    id: v.id("documents"),
+    id: v.id("images"),
   },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
@@ -141,26 +141,26 @@ export const archive = mutation({
 
     const userId = identity.subject;
 
-    const existingDocument = await ctx.db.get(args.id);
+    const existingImage = await ctx.db.get(args.id);
 
-    if (!existingDocument) {
+    if (!existingImage) {
       throw new Error("Not found");
     }
 
-    if (existingDocument.userId !== userId) {
+    if (existingImage.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    const document = await ctx.db.patch(args.id, {
+    const images = await ctx.db.patch(args.id, {
       isArchived: true,
     });
 
-    return document;
+    return images;
   },
 });
 
 export const restore = mutation({
-  args: { id: v.id("documents") },
+  args: { id: v.id("images") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -170,26 +170,26 @@ export const restore = mutation({
 
     const userId = identity.subject;
 
-    const existingDocument = await ctx.db.get(args.id);
+    const existingImage = await ctx.db.get(args.id);
 
-    if (!existingDocument) {
+    if (!existingImage) {
       throw new Error("Not found");
     }
 
-    if (existingDocument.userId !== userId) {
+    if (existingImage.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    const document = await ctx.db.patch(args.id, {
+    const images = await ctx.db.patch(args.id, {
       isArchived: false,
     });
 
-    return document;
+    return images;
   },
 });
 
 export const remove = mutation({
-  args: { id: v.id("documents") },
+  args: { id: v.id("images") },
   handler: async (ctx, args) => {
     const identity = await ctx.auth.getUserIdentity();
 
@@ -199,19 +199,19 @@ export const remove = mutation({
 
     const userId = identity.subject;
 
-    const existingDocument = await ctx.db.get(args.id);
+    const existingImage = await ctx.db.get(args.id);
 
-    if (!existingDocument) {
+    if (!existingImage) {
       throw new Error("Not found");
     }
 
-    if (existingDocument.userId !== userId) {
+    if (existingImage.userId !== userId) {
       throw new Error("Not authorized");
     }
 
-    const document = await ctx.db.delete(args.id);
+    const images = await ctx.db.delete(args.id);
 
-    return document;
+    return images;
   },
 });
 
@@ -225,14 +225,14 @@ export const getTrash = query({
 
     const userId = identity.subject;
 
-    const documents = await ctx.db
-      .query("documents")
+    const images = await ctx.db
+      .query("images")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), true))
       .order("desc")
       .collect();
 
-    return documents;
+    return images;
   },
 });
 
@@ -247,13 +247,13 @@ export const getSearch = query({
 
     const userId = identity.subject;
 
-    const documents = await ctx.db
-      .query("documents")
+    const images = await ctx.db
+      .query("images")
       .withIndex("by_user", (q) => q.eq("userId", userId))
       .filter((q) => q.eq(q.field("isArchived"), false))
       .order("desc")
       .collect();
 
-    return documents;
+    return images;
   },
 });
