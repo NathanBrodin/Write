@@ -25,6 +25,7 @@ export default function ProjectList() {
 
   function onRedirect(projectId: string) {
     router.push(`/projects/${projectId}`);
+    onExpand(projectId);
   }
 
   if (projects === undefined) {
