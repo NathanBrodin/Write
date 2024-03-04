@@ -8,7 +8,7 @@ import {
   DropdownMenuContent,
   DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useUser } from "@clerk/clerk-react";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
@@ -19,20 +19,23 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 export function Menu({ documentId }: { documentId: Id<"documents"> }) {
   const router = useRouter();
+  const params = useParams();
   const { user } = useUser();
 
   const archive = useMutation(api.documents.archive);
 
   function onArchive() {
-    const promise = archive({ id: documentId });
+    const promise = archive({ id: documentId }).then(() => {
+      if (params.projectId) {
+        router.push(`/projects/${params.projectId}`);
+      }
+    });
 
     toast.promise(promise, {
       loading: "Moving to trash...",
       success: "Note moved to trash!",
-      error: "Failed to archive note.",
+      error: "Failed to archive document.",
     });
-
-    router.push("/documents");
   }
 
   return (

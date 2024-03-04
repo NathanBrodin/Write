@@ -9,7 +9,7 @@ import { useParams } from "next/navigation";
 import { Title } from "./title";
 import { Banner } from "./banner";
 import { Menu } from "./menu";
-import Share from "./share";
+import Publish from "./share";
 import { Mode } from "@/lib/types";
 import { useLocalStorage } from "usehooks-ts";
 
@@ -74,7 +74,7 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
                 <FileText className="h-4 w-4" />
               </ToggleGroupItem>
             </ToggleGroup>
-            <Share initialData={document} />
+            <Publish initialData={document} />
             <Menu documentId={document._id} />
           </div>
         </div>

@@ -11,11 +11,11 @@ import { Check, Copy, Globe } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
-interface ShareProps {
+interface PublishProps {
   initialData: Doc<"documents">;
 }
 
-export default function Share({ initialData }: ShareProps) {
+export default function Publish({ initialData }: PublishProps) {
   const origin = useOrigin();
   const update = useMutation(api.documents.update);
 
@@ -34,8 +34,8 @@ export default function Share({ initialData }: ShareProps) {
 
     toast.promise(promise, {
       loading: "Publishing...",
-      success: "Note published!",
-      error: "Failed to publish note.",
+      success: "Document published!",
+      error: "Failed to publish document.",
     });
   }
 
@@ -49,8 +49,8 @@ export default function Share({ initialData }: ShareProps) {
 
     toast.promise(promise, {
       loading: "Unpublishing...",
-      success: "Note unpublished!",
-      error: "Failed to unpublish note.",
+      success: "Document unpublished!",
+      error: "Failed to unpublish document.",
     });
   }
 
@@ -67,7 +67,7 @@ export default function Share({ initialData }: ShareProps) {
     <Popover>
       <PopoverTrigger asChild>
         <Button size="sm" variant="ghost">
-          Share
+          Publish
           {initialData.isPublished && (
             <Globe className="ml-2 h-4 w-4 text-sky-500" />
           )}
@@ -79,7 +79,7 @@ export default function Share({ initialData }: ShareProps) {
             <div className="flex items-center gap-x-2">
               <Globe className="h-4 w-4 animate-pulse text-sky-500" />
               <p className="text-xs font-medium text-sky-500">
-                This note is live on web.
+                This document is live on web.
               </p>
             </div>
             <div className="flex items-center">
@@ -112,7 +112,7 @@ export default function Share({ initialData }: ShareProps) {
         ) : (
           <div className="flex flex-col items-center justify-center">
             <Globe className="text-muted-foreground mb-2 h-8 w-8" />
-            <p className="mb-2 text-sm font-medium">Publish this note</p>
+            <p className="mb-2 text-sm font-medium">Publish this document</p>
             <span className="text-muted-foreground mb-4 text-xs">
               Share your work with others.
             </span>

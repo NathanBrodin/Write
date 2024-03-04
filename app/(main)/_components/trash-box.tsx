@@ -46,11 +46,11 @@ export default function TrashBox() {
 
   function onDocumentClick(
     documentId: Id<"documents">,
-    parentProjectId?: Id<"projects">,
+    projectId?: Id<"projects">,
   ) {
-    if (!parentProjectId) return;
+    if (!projectId) return;
 
-    router.push(`/projects/${parentProjectId}/${documentId}`);
+    router.push(`/projects/${projectId}/${documentId}`);
   }
 
   function onProjectClick(projectId: Id<"projects">) {
@@ -206,9 +206,7 @@ export default function TrashBox() {
           <div
             key={document._id}
             role="button"
-            onClick={() =>
-              onDocumentClick(document._id, document.parentProject)
-            }
+            onClick={() => onDocumentClick(document._id, document.projectId)}
             className="hover:bg-primary/5 text-primary flex w-full items-center justify-between rounded-sm text-sm"
           >
             <span className="truncate pl-2">{document.title}</span>
@@ -222,7 +220,7 @@ export default function TrashBox() {
               </div>
               <ConfirmModal
                 onConfirm={() =>
-                  onDocumentRemove(document._id, document.parentProject)
+                  onDocumentRemove(document._id, document.projectId)
                 }
               >
                 <div
