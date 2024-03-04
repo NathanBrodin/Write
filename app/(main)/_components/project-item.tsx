@@ -13,7 +13,7 @@ import { api } from "@/convex/_generated/api";
 import { Id } from "@/convex/_generated/dataModel";
 import { cn } from "@/lib/utils";
 import { useUser } from "@clerk/clerk-react";
-import { useMutation, useQuery } from "convex/react";
+import { useMutation } from "convex/react";
 import {
   ChevronDown,
   ChevronRight,
@@ -32,6 +32,7 @@ import { useUploadImage } from "@/hooks/use-upload-image";
 
 interface ItemProps {
   projectId: Id<"projects">;
+  projectTitle: string;
   active?: boolean;
   expanded?: boolean;
   onExpand?: () => void;
@@ -41,6 +42,7 @@ interface ItemProps {
 
 export default function ProjectItem({
   projectId,
+  projectTitle,
   active,
   expanded,
   onExpand,
@@ -49,9 +51,7 @@ export default function ProjectItem({
 }: ItemProps) {
   const { user } = useUser();
   const router = useRouter();
-  const project = useQuery(api.projects.getById, {
-    projectId: projectId,
-  });
+
   const create = useMutation(api.documents.create);
   const archive = useMutation(api.projects.archive);
   const uploadImage = useUploadImage();
@@ -70,7 +70,7 @@ export default function ProjectItem({
 
     const promise = create({
       title: "Untitled",
-      parentProject: projectId,
+      projectId: projectId,
     }).then((documentId) => {
       if (!expanded) {
         onExpand?.();
@@ -148,7 +148,12 @@ export default function ProjectItem({
             forceMount
           >
             <DropdownMenuLabel>
-              {project && <ProjectTitle initialData={project} />}
+              {projectId && (
+                <ProjectTitle
+                  initialTitle={projectTitle}
+                  projectId={projectId}
+                />
+              )}
             </DropdownMenuLabel>
             <DropdownMenuItem onClick={onArchive}>
               <Trash className="mr-2 h-4 w-4" />

@@ -15,7 +15,7 @@ export default function MainLayout({
 
   if (isLoading) {
     return (
-      <div className="h-full flex flex-col items-center justify-center dark:bg-[#1F1F1F]">
+      <div className="flex h-full flex-col items-center justify-center dark:bg-[#1F1F1F]">
         <Spinner size="lg" />
         <p className="font-medium">Checking authentication status...</p>
       </div>
@@ -26,9 +26,9 @@ export default function MainLayout({
     return redirect("/");
   }
   return (
-    <div className="h-full flex dark:bg-[#1F1F1F]">
+    <div className="flex h-full dark:bg-[#1F1F1F]">
       <Navigation />
-      <main className="flex-1 h-full overflow-y-auto">
+      <main className="h-full flex-1 overflow-y-auto">
         <SearchCommand />
         {children}
       </main>

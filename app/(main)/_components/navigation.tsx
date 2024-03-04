@@ -5,7 +5,6 @@ import { cn } from "@/lib/utils";
 import {
   ChevronsLeft,
   MenuIcon,
-  Plus,
   PlusCircle,
   Search,
   Trash,

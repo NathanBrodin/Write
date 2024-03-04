@@ -4,23 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Skeleton } from "@/components/ui/skeleton";
 import { api } from "@/convex/_generated/api";
-import { Doc } from "@/convex/_generated/dataModel";
+import { Id } from "@/convex/_generated/dataModel";
 import { useMutation } from "convex/react";
 import { useRef, useState } from "react";
 
 interface TitleProps {
-  initialData: Doc<"projects">;
+  projectId: Id<"projects">;
+  initialTitle: string;
 }
 
-export function ProjectTitle({ initialData }: TitleProps) {
+export function ProjectTitle({ initialTitle, projectId }: TitleProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const update = useMutation(api.projects.update);
 
-  const [title, setTitle] = useState(initialData.title || "Untitled");
+  const [title, setTitle] = useState(initialTitle || "Untitled");
   const [isEditing, setIsEditing] = useState(false);
 
   function enableInput() {
-    setTitle(initialData.title);
+    setTitle(initialTitle);
     setIsEditing(true);
     setTimeout(() => {
       inputRef.current?.focus();
@@ -35,7 +36,7 @@ export function ProjectTitle({ initialData }: TitleProps) {
   function onChange(event: React.ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
     update({
-      id: initialData._id,
+      id: projectId,
       title: event.target.value || "Untitled",
     });
   }
@@ -63,9 +64,9 @@ export function ProjectTitle({ initialData }: TitleProps) {
           onClick={enableInput}
           variant="ghost"
           size="sm"
-          className="font-normal h-auto p-1"
+          className="h-auto p-1 font-normal"
         >
-          <span className="truncate">{initialData?.title}</span>
+          <span className="truncate">{initialTitle}</span>
         </Button>
       )}
     </div>
