@@ -5,6 +5,7 @@ import { useConvexAuth } from "convex/react";
 import { redirect } from "next/navigation";
 import Navigation from "./_components/navigation";
 import { SearchCommand } from "@/components/search-command";
+import useStoreUserEffect from "@/hooks/use-store-user-effect";
 
 export default function MainLayout({
   children,
@@ -12,6 +13,9 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   const { isAuthenticated, isLoading } = useConvexAuth();
+
+  // Store user in the store
+  useStoreUserEffect();
 
   if (isLoading) {
     return (
