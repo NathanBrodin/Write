@@ -20,7 +20,7 @@ To get a look at your document, you can use the preview mode to see how your doc
 
 Once you are all done, you can pusblish your document to the web, and share it with everyone! You can also export your document to a PDF file.
 
-![Preview](.github/images/editor-preview.png)
+![Preview](.github/images/editor-preview.jpeg)
 
 ## Key Features:
 
