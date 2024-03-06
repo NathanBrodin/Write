@@ -1,39 +1,41 @@
 <div align="center">
 
-# Notion
-**Your Ideas, Documents, & Plans. Unified. Welcome to Notion**
+# Write
+
+**Capture, Collaborate, Create. Welcome to Write is your all-in-one platform for seamless collaboration and creativity.**
 
 </div>
 
 ![Marketing page](.github/images/marketing.png)
 
-A Notion clone built with [Next.js](https://nextjs.org/) and [Tailwind CSS](https://tailwindcss.com/).
+Write is a powerful Markdown editor that allows you to write, edit, and share your documents with everyone.
 
-Notion is a note-taking and collaboration application with markdown support, and this project aims to replicate its core features.
+![Documents](.github/images/editor-sidebar.png)
 
-Share your ideas, documents, and plans with your team, and keep everything in one place.
+Start by creating a new project, using a available template or starting from scratch. Next, you can write your document using the powerful Markdown editor. You can also add images, videos, and other files to your document.
 
-![Documents](.github/images/documents.png)
+If you are lost using Markdown, you can use the built-in Markdown toolbar to help you out.
+
+To get a look at your document, you can use the preview mode to see how your document will look like when published, on the top right of the screen.
+
+Once you are all done, you can pusblish your document to the web, and share it with everyone! You can also export your document to a PDF file.
+
+![Preview](.github/images/editor-preview.png)
 
 ## Key Features:
 
 - Real-time database
-- Notion-style editor
-- Light and Dark mode
-- Infinite children documents
-- Trash can & soft delete
-- Authentication
+- Notion-style look and feel
+- Publish your documents to the web
+- Export your documents to a PDF file
+- Trash can & soft delete, with recovery
 - File upload
-- File deletion
-- File replacement
-- Icons for each document (changes in real-time)
-- Expandable sidebar
+- Light and Dark mode
 - Full mobile responsiveness
-- Publish your note to the web
+- Authentication
+- Expandable sidebar
 - Fully collapsable sidebar
 - Landing page
-- Cover image of each document
-- Recover deleted files
 
 ## Tech Stack
 
@@ -57,16 +59,18 @@ These instructions will get you a copy of the project up and running on your loc
 1. Clone the repository
 
 ```bash
-git clone https://github.com/NathanBrodin/Notion.git
-cd Notion
+git clone https://github.com/NathanBrodin/Write.git
+cd Write
 ```
 
 2. Install the dependencies
 
 (Install [Bun](https://bun.sh/) if you haven't already), or use npm or yarn
+
 ```bash
 curl -fsSL https://bun.sh/install | bash
 ```
+
 Then install the dependencies
 
 ```bash
@@ -76,6 +80,7 @@ bun install
 3. Set up the environment variables
 
 Create a `.env.local` file in the root of the project and add the following environment variables:
+
 ```bash
 CONVEX_DEPLOYMENT=''
 
@@ -108,8 +113,9 @@ bun run dev
 6. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 ## License
+
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Acknowledgements
 
-Made using [Code With Antonio](https://www.youtube.com/watch?v=0OaDyjB9Ib8)'s tutorial.
+Original code maade using [Code With Antonio](https://www.youtube.com/watch?v=0OaDyjB9Ib8)'s tutorial, which is a Notion Clone. I have then modified it to fit my needs and added a lot of new features!
