@@ -118,4 +118,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgements
 
-Original code maade using [Code With Antonio](https://www.youtube.com/watch?v=0OaDyjB9Ib8)'s tutorial, which is a Notion Clone. I have then modified it to fit my needs and added a lot of new features!
+Original code made using [Code With Antonio](https://www.youtube.com/watch?v=0OaDyjB9Ib8)'s tutorial, which is a Notion Clone. I have then modified it to fit my needs and added a lot of new features!
