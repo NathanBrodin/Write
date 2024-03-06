@@ -71,20 +71,21 @@ export default function Features() {
           <div className="lg:pr-4">
             <div className=" max-w-xl text-base leading-7 lg:max-w-lg">
               <p>
-                Start your journey by creating a new project, whether it's from
-                a template or starting from scratch. And if Markdown seems
+                Start your journey by creating a new project, whether it&apos;s
+                from a template or starting from scratch. And if Markdown seems
                 daunting, our built-in toolbar is there to guide you every step
                 of the way.
               </p>
               <p className="py-4">
                 Preview your masterpiece with ease using the preview mode,
-                giving you a glimpse of how your document will look once it's
-                published.
+                giving you a glimpse of how your document will look once
+                it&apos;s published.
               </p>
               <p>
-                When you're satisfied, share your document effortlessly with the
-                world! Publish to the web and reach a wider audience. Need a PDF
-                version? Exporting your document is just a click away.
+                When you&apos;re satisfied, share your document effortlessly
+                with the world! Publish to the web and reach a wider audience.
+                Need a PDF version? Exporting your document is just a click
+                away.
               </p>
               <ul role="list" className="mt-8 space-y-8">
                 <li className="flex gap-x-3">
@@ -94,7 +95,7 @@ export default function Features() {
                   />
                   <span>
                     <strong className="font-semibold">Create.</strong>{" "}
-                    Seamlessly create and edit your documents with Write's
+                    Seamlessly create and edit your documents with Write&apos;s
                     intuitive Markdown editor. No more struggling with complex
                     formatting—focus on your content, and let Write handle the
                     rest.
@@ -119,14 +120,14 @@ export default function Features() {
                   />
                   <span>
                     <strong className="font-semibold">Publish.</strong> Share
-                    your creations with the world effortlessly. Whether you're
-                    publishing to the web or exporting to PDF, Write makes
-                    sharing your documents a breeze.
+                    your creations with the world effortlessly. Whether
+                    you&apos;re publishing to the web or exporting to PDF, Write
+                    makes sharing your documents a breeze.
                   </span>
                 </li>
               </ul>
               <p className="mt-8">
-                Experience the ease and power of Write today. Don't let the
+                Experience the ease and power of Write today. Don&apos;t let the
                 limitations of other platforms hold you back; with Write, the
                 possibilities are endless. Embark on your creative journey with
                 Write—where capturing, collaborating, and creating converge
