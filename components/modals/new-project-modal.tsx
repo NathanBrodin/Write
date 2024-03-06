@@ -7,45 +7,59 @@ import { Dialog, DialogContent, DialogHeader } from "../ui/dialog";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useNewProject } from "@/hooks/use-new-project";
+import TemplateSelector from "../template-selector";
 
 export function NewProjectModal() {
   const newProject = useNewProject();
   const [title, setTitle] = useState("");
-  const create = useMutation(api.projects.create);
+  const [template, setTemplate] = useState("");
+  const createProject = useMutation(api.projects.create);
+  const createDocument = useMutation(api.documents.create);
   const router = useRouter();
 
-  function onCreate(event: React.FormEvent) {
+  async function onCreate(event: React.FormEvent) {
     event.preventDefault();
 
-    const promise = create({ title }).then((projectId) => {
-      newProject.onClose();
-      router.push(`/projects/${projectId}`);
-    });
+    const toastId = toast.loading("Creating a new project...");
 
-    toast.promise(promise, {
-      loading: "Creating a new project...",
-      success: "New project created!",
-      error: "Failed to create a new project.",
-    });
+    try {
+      const projectId = await createProject({ title });
+      const documentId = await createDocument({
+        title: "main",
+        projectId: projectId,
+        content: template,
+      });
+
+      toast.dismiss(toastId);
+      toast.success("New project created!");
+
+      newProject.onClose();
+      router.push(`/projects/${projectId}/${documentId}`);
+    } catch (error) {
+      toast.dismiss(toastId);
+      toast.error("Failed to create a new project.");
+      console.error(error);
+    }
   }
 
   return (
     <Dialog open={newProject.isOpen} onOpenChange={newProject.onClose}>
-      <DialogContent>
+      <DialogContent className="max-w-3xl">
         <form onSubmit={onCreate}>
           <DialogHeader>
             <h2 className="text-center text-lg font-semibold">New Project</h2>
           </DialogHeader>
-          <Input
-            className="w-full"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            placeholder="Untitled"
-          />
-          {/* TODO: Add a template selector, with blank as default */}
-          <Button type="submit" className="mt-4 w-full">
-            Create
-          </Button>
+          <div className="mt-2 flex flex-col items-center gap-2">
+            <Input
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="Untitled"
+            />
+            <TemplateSelector onChange={setTemplate} />
+            <Button type="submit" className="mt-4">
+              Create
+            </Button>
+          </div>
         </form>
       </DialogContent>
     </Dialog>
