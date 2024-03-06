@@ -15,7 +15,7 @@ export default function Navbar() {
   return (
     <div
       className={cn(
-        "bg-background fixed top-0 z-50 flex w-full items-center p-6 dark:bg-[#1F1F1F]",
+        "bg-background fixed top-0 z-50 flex w-full items-center px-6 py-3 dark:bg-[#1F1F1F]",
         scrolled && "border-b shadow-sm",
       )}
     >
