@@ -43,8 +43,8 @@ export function SearchCommand() {
     return () => document.removeEventListener("keydown", down);
   }, [toggle]);
 
-  function onSelect(id: string) {
-    router.push(`/documents/${id}`);
+  function onSelect(id: string, projectId: string) {
+    router.push(`/projects/${projectId}/${id}`);
     onClose();
   }
 
@@ -54,7 +54,7 @@ export function SearchCommand() {
 
   return (
     <CommandDialog open={isOpen} onOpenChange={onClose}>
-      <CommandInput placeholder={`Search ${user?.fullName}'s Notion...`} />
+      <CommandInput placeholder={`Search ${user?.fullName}'s documents...`} />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Documents">
@@ -63,7 +63,7 @@ export function SearchCommand() {
               key={document._id}
               value={`${document._id}-${document.title}`}
               title={document.title}
-              onSelect={onSelect}
+              onSelect={() => onSelect(document._id, document.projectId)}
             >
               <File className="mr-2 h-4 w-4" />
               <span>{document.title}</span>
