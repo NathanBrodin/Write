@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 import { ThemeProvider } from "@/components/providers/theme-provider";
 import { ConvexClientProvider } from "@/components/providers/convex-provider";
@@ -99,6 +100,7 @@ export default function RootLayout({
           </EdgeStoreProvider>
         </ConvexClientProvider>
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
