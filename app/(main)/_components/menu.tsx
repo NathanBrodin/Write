@@ -38,6 +38,10 @@ export function Menu({ documentId }: { documentId: Id<"documents"> }) {
     });
   }
 
+  function onExport() {
+    window.print();
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,7 +55,7 @@ export function Menu({ documentId }: { documentId: Id<"documents"> }) {
         alignOffset={8}
         forceMount
       >
-        <DropdownMenuItem onClick={() => {}}>
+        <DropdownMenuItem onClick={onExport}>
           <FileUp className="mr-2 h-4 w-4" />
           Export
         </DropdownMenuItem>

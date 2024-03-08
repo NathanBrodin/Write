@@ -16,7 +16,7 @@ export default function Heading() {
         <span className="underline">Write</span>
       </h1>
       <h3 className="text-base font-medium sm:text-xl md:text-2xl">
-        Write is your all-in-one platform for <br />
+        Write is your all-in-one Markdown Editor for <br />
         seamless collaboration and creativity.
       </h3>
       {isLoading && (

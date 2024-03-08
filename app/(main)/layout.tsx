@@ -30,7 +30,7 @@ export default function MainLayout({
     return redirect("/");
   }
   return (
-    <div className="flex h-full dark:bg-[#1F1F1F]">
+    <div className="flex h-full dark:bg-[#1F1F1F] print:hidden">
       <Navigation />
       <main className="h-full flex-1 overflow-y-auto">
         <SearchCommand />
