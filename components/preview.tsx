@@ -135,7 +135,7 @@ export default function Preview({ content }: { content?: string }) {
 
   return (
     <Markdown
-      className="prose prose-sm sm:prose-base dark:prose-invert mx-auto w-full px-4 md:max-w-3xl lg:max-w-4xl"
+      className="prose prose-sm sm:prose-base dark:prose-invert print:prose-sm mx-auto w-full px-4 md:max-w-3xl lg:max-w-4xl print:max-w-none print:px-0"
       components={options}
       remarkPlugins={[remarkGfm]}
       rehypePlugins={[rehypeSanitize]}

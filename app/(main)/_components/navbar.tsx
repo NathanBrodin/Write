@@ -43,7 +43,7 @@ export default function Navbar({ isCollapsed, onResetWidth }: NavbarProps) {
 
   return (
     <>
-      <nav className="bg-background flex w-full items-center gap-x-4 px-3 py-2 dark:bg-[#1F1F1F]">
+      <nav className="bg-background flex w-full items-center gap-x-4 px-3 py-2 dark:bg-[#1F1F1F] print:hidden">
         {isCollapsed && (
           <MenuIcon
             role="button"

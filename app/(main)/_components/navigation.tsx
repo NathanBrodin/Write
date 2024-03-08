@@ -127,7 +127,7 @@ export default function Navigation() {
       <aside
         ref={sidebarRef}
         className={cn(
-          "group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col justify-between overflow-y-auto",
+          "group/sidebar bg-secondary relative z-[99999] flex h-full w-60 flex-col justify-between overflow-y-auto print:hidden",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "w-0",
         )}
@@ -183,7 +183,7 @@ export default function Navigation() {
       <div
         ref={navbarRef}
         className={cn(
-          "absolute left-60 top-0 z-[99999] w-[calc(100%-240px)]",
+          "absolute left-60 top-0 z-[99999] w-[calc(100%-240px)] print:hidden",
           isResetting && "transition-all duration-300 ease-in-out",
           isMobile && "left-0 w-full",
         )}
